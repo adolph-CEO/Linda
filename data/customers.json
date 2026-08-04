@@ -4,9 +4,16 @@
     "name": "陳豆腐",
     "line": "adolph_45",
     "birthday": "1979-04-05",
-    "balance": 0,
-    "sessionsRemaining": 0,
-    "ledger": [],
+    "balance": 1000,
+    "sessionsRemaining": 10,
+    "ledger": [
+      {
+        "date": "2026-08-04T05:46:02.283Z",
+        "balance": 1000,
+        "sessions": 10,
+        "note": ""
+      }
+    ],
     "visits": [
       {
         "date": "2026-08-05",
