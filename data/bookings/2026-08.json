@@ -1,0 +1,29 @@
+[
+  {
+    "id": "bk_1785822233158_2ersi4",
+    "serviceId": "body",
+    "addons": [
+      "bowl",
+      "oil"
+    ],
+    "date": "2026-08-05",
+    "time": "10:00",
+    "price": 2600,
+    "customer": {
+      "name": "陳豆腐",
+      "phone": "0924000292",
+      "line": "adolph_45",
+      "birthday": "1979-04-05",
+      "firstTime": true
+    },
+    "concerns": [
+      "情緒壓力",
+      "睡眠",
+      "疲勞",
+      "其他"
+    ],
+    "note": "說謝謝",
+    "status": "confirmed",
+    "createdAt": "2026-08-04T05:43:53.158Z"
+  }
+]
