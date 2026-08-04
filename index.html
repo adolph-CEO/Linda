@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>靈魂藍圖 SPA｜線上預約</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum-deep:#2f1b3d;
+  --plum:#4a2a5e;
+  --berry:#9b3a72;
+  --rose:#d4548a;
+  --blush:#f3e3ea;
+  --parchment:#faf6f3;
+  --gold:#c9a35c;
+  --gold-soft:#e6d3a3;
+  --ink:#2f1b3d;
+  --ink-soft:#6b5a75;
+  --line:#e4d8de;
+  --ok:#5c8a6a;
+  --danger:#b3543f;
+  --shadow:0 10px 30px rgba(47,27,61,.12);
+  --radius:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--parchment);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Noto Serif TC',serif;margin:0;}
+.accent-en{font-family:'Cormorant Garamond',serif;font-style:italic;}
+button{font-family:inherit;}
+a{color:inherit;}
+.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--parchment);position:relative;box-shadow:0 0 60px rgba(0,0,0,.08);}
+.hidden{display:none !important;}
+.hero{position:relative;padding:38px 24px 30px;background:linear-gradient(150deg,#e7b8c9 0%,#c46f9a 28%,#7a3f7f 62%,#3d2352 100%);color:#fff;overflow:hidden;text-align:center;}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%, rgba(255,255,255,.35), transparent 55%);pointer-events:none;}
+.hero .stars{position:absolute;inset:0;pointer-events:none;}
+.hero .stars span{position:absolute;color:rgba(255,255,255,.55);font-size:11px;}
+.hero-logo{width:118px;height:auto;position:relative;z-index:1;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25));margin-bottom:6px;}
+.hero h1{font-size:26px;letter-spacing:.14em;font-weight:600;position:relative;z-index:1;}
+.hero .sub{margin-top:6px;font-size:12.5px;letter-spacing:.32em;opacity:.85;position:relative;z-index:1;}
+.hero .tagline{margin-top:16px;font-size:13.5px;line-height:1.9;opacity:.92;position:relative;z-index:1;font-weight:300;}
+.hero .divider{width:34px;height:1px;background:rgba(255,255,255,.55);margin:16px auto 0;position:relative;z-index:1;}
+.steps{display:flex;justify-content:center;gap:6px;padding:16px 20px 4px;background:var(--parchment);}
+.step-dot{flex:1;max-width:52px;height:3px;border-radius:2px;background:var(--line);transition:.3s;}
+.step-dot.active{background:linear-gradient(90deg,var(--rose),var(--gold));}
+.step-dot.done{background:var(--gold-soft);}
+.section{padding:22px 20px 6px;}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+.section-title{display:flex;align-items:baseline;gap:8px;margin-bottom:14px;}
+.section-title .num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:22px;}
+.section-title h2{font-size:17px;letter-spacing:.04em;color:var(--plum-deep);}
+.section-title .opt{font-size:11px;color:var(--ink-soft);margin-left:auto;}
+.service{border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;transition:.2s;position:relative;}
+.service:last-child{margin-bottom:0;}
+.service:active{transform:scale(.99);}
+.service.selected{border-color:var(--rose);background:linear-gradient(135deg,#fff,#fbeef3);box-shadow:0 4px 16px rgba(212,84,138,.18);}
+.service-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.service-name{font-family:'Noto Serif TC',serif;font-size:15.5px;font-weight:600;color:var(--plum-deep);}
+.service-meta{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+.service-price{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--berry);white-space:nowrap;}
+.service-desc{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.7;}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;}
+.service.selected .radio-dot{border-color:var(--rose);}
+.service.selected .radio-dot::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--rose);}
+.addon{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--line);cursor:pointer;}
+.addon:last-child{border-bottom:none;}
+.checkbox{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.addon.checked .checkbox{background:var(--gold);border-color:var(--gold);}
+.addon.checked .checkbox::after{content:"✓";color:#fff;font-size:11px;}
+.addon-name{font-size:13.5px;}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cal-nav{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--plum);}
+.cal-nav:disabled{opacity:.3;cursor:default;}
+.cal-month{font-family:'Noto Serif TC',serif;font-size:15px;color:var(--plum-deep);letter-spacing:.05em;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;}
+.cal-dow{font-size:10.5px;color:var(--ink-soft);padding-bottom:4px;}
+.cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;}
+.cal-day{width:100%;height:100%;border-radius:50%;border:none;background:transparent;font-size:13px;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.cal-day.past{color:#d7cdd2;cursor:default;}
+.cal-day.full{color:#d7cdd2;cursor:default;text-decoration:line-through;text-decoration-color:#d7cdd2;}
+.cal-day.available:hover{background:var(--blush);}
+.cal-day.selected{background:linear-gradient(135deg,var(--rose),var(--plum));color:#fff;font-weight:600;}
+.cal-day.today::after{content:"";position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--gold);}
+.cal-legend{display:flex;gap:16px;margin-top:14px;font-size:11px;color:var(--ink-soft);flex-wrap:wrap;}
+.legend-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle;}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.slot{border:1.5px solid var(--gold-soft);border-radius:12px;padding:12px 6px;text-align:center;font-size:14px;color:var(--plum-deep);cursor:pointer;background:#fffdf9;transition:.15s;font-weight:500;}
+.slot:active{transform:scale(.97);}
+.slot.taken{border-color:var(--line);color:#c7bcc2;background:#f2eeef;cursor:default;text-decoration:line-through;}
+.slot.selected{background:linear-gradient(135deg,var(--rose),var(--plum));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(154,58,114,.35);}
+.slot-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:12.5px;padding:14px 0;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;}
+.field input[type=text],.field input[type=tel],.field input[type=password],.field textarea{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:14.5px;background:#fdfbfa;color:var(--ink);}
+.field textarea{resize:vertical;min-height:64px;font-family:inherit;}
+.field input:focus,.field textarea:focus{outline:2px solid var(--gold-soft);outline-offset:1px;border-color:var(--gold);}
+.pill-group{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{padding:8px 14px;border:1px solid var(--line);border-radius:20px;font-size:12.5px;cursor:pointer;background:#fff;color:var(--ink-soft);transition:.15s;}
+.pill.on{background:var(--plum);border-color:var(--plum);color:#fff;}
+.toggle-row{display:flex;gap:10px;}
+.toggle-row .pill{flex:1;text-align:center;}
+.btn{width:100%;padding:15px;border-radius:14px;border:none;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.06em;transition:.15s;}
+.btn-primary{background:linear-gradient(135deg,var(--rose),var(--plum));color:#fff;box-shadow:0 8px 20px rgba(122,63,127,.3);}
+.btn-primary:disabled{opacity:.35;box-shadow:none;cursor:default;}
+.btn-primary:active:not(:disabled){transform:translateY(1px);}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink-soft);}
+.btn-row{display:flex;gap:10px;margin-top:18px;}
+.btn-row .btn-ghost{flex:0 0 92px;}
+.summary{background:var(--blush);border-radius:14px;padding:16px;font-size:13px;color:var(--plum-deep);line-height:2;}
+.summary b{color:var(--berry);}
+.confirm-wrap{padding:50px 26px;text-align:center;}
+.confirm-icon{font-size:44px;}
+.confirm-wrap h2{font-size:19px;margin:16px 0 8px;color:var(--plum-deep);}
+.confirm-wrap p{font-size:13px;color:var(--ink-soft);line-height:1.9;}
+.notice-card{margin:26px 0;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;font-size:12.5px;color:var(--ink-soft);line-height:2.1;}
+.notice-card h3{font-size:13px;color:var(--plum-deep);margin-bottom:8px;}
+.contact-card{margin-top:22px;background:linear-gradient(150deg,var(--plum-deep),var(--plum));color:#fff;border-radius:16px;padding:20px;text-align:center;}
+.contact-card .name-en{font-size:20px;}
+.contact-card .name-zh{font-size:13px;letter-spacing:.2em;opacity:.85;margin-top:2px;}
+.contact-card img{width:120px;height:120px;border-radius:10px;margin-top:14px;background:#fff;padding:6px;}
+.contact-card .phone{margin-top:10px;font-size:13px;opacity:.9;}
+.foot{padding:26px 20px 40px;text-align:center;}
+.foot a{font-size:11px;color:var(--ink-soft);text-decoration:none;border-bottom:1px dotted var(--ink-soft);}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--plum-deep);color:#fff;padding:11px 20px;border-radius:30px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:999;opacity:0;transition:.25s;pointer-events:none;}
+.toast.show{opacity:1;bottom:34px;}
+.admin-lock{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--plum-deep);padding:24px;}
+.lock-card{background:#fff;border-radius:18px;padding:30px 26px;width:100%;max-width:320px;text-align:center;}
+.lock-card h2{font-size:16px;color:var(--plum-deep);margin-bottom:16px;}
+.lock-card input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);text-align:center;font-size:16px;margin-bottom:14px;}
+.lock-err{color:var(--danger);font-size:12px;margin-bottom:10px;min-height:14px;}
+.admin{background:var(--parchment);min-height:100vh;}
+.admin-top{background:var(--plum-deep);color:#fff;padding:18px 18px 14px;display:flex;align-items:center;justify-content:space-between;}
+.admin-top h1{font-size:16px;letter-spacing:.06em;}
+.admin-top a{font-size:11.5px;opacity:.75;text-decoration:none;}
+.tabs{display:flex;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;}
+.tab{flex:0 0 auto;padding:13px 16px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;}
+.tab.active{color:var(--berry);border-color:var(--berry);font-weight:600;}
+.admin-body{padding:18px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;}
+.stat .label{font-size:11px;color:var(--ink-soft);}
+.stat .value{font-family:'Noto Serif TC',serif;font-size:22px;color:var(--plum-deep);margin-top:4px;}
+.stat .value small{font-size:12px;font-weight:400;color:var(--ink-soft);}
+.list-item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;}
+.li-top{display:flex;justify-content:space-between;align-items:center;}
+.li-name{font-weight:600;font-size:14px;color:var(--plum-deep);}
+.li-time{font-size:12px;color:var(--berry);font-weight:600;}
+.li-meta{font-size:11.5px;color:var(--ink-soft);margin-top:4px;line-height:1.7;}
+.tag-sm{display:inline-block;background:var(--blush);color:var(--berry);font-size:10.5px;padding:2px 8px;border-radius:10px;margin-right:4px;margin-top:4px;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13px;}
+.mini-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 11px;font-size:11.5px;color:var(--plum);cursor:pointer;}
+.mini-btn.primary{background:var(--plum);color:#fff;border-color:var(--plum);}
+.row-between{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;}
+.search-bar{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--line);margin-bottom:14px;font-size:13.5px;background:#fff;}
+.modal-bg{position:fixed;inset:0;background:rgba(47,27,61,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50;}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:22px 20px 30px;width:100%;max-width:520px;max-height:82vh;overflow:auto;}
+.modal h3{font-size:15px;color:var(--plum-deep);margin-bottom:14px;}
+.modal-close{float:right;color:var(--ink-soft);cursor:pointer;font-size:13px;}
+.cal-sub{font-size:11px;color:var(--ink-soft);word-break:break-all;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* =========================================================
+   靈魂藍圖 SPA - 線上預約系統（Vercel + GitHub 版）
+   資料透過 /api/* 讀寫，實際存在 GitHub repo 的 data/ 目錄下
+   ========================================================= */
+const SERVICES = [
+  {id:'body', name:'身體開運 Spa', duration:120, price:2000, desc:'情緒壓力大・能量低落・身體疲勞・想提升磁場'},
+  {id:'head', name:'頭部舒壓 Spa', duration:60, price:1680, desc:'睡不好・腦袋停不下來・肩頸僵硬・思緒混亂'},
+  {id:'warm', name:'暖宮 Spa', duration:90, price:2500, desc:'經期不舒服・手腳冰冷・女性保養・子宮循環調理'},
+];
+const ADDONS = [
+  {id:'bowl', name:'頌缽深度放鬆', price:300},
+  {id:'oil', name:'花油能量調頻', price:300},
+  {id:'tarot', name:'塔羅牌指引', price:500},
+  {id:'mandala', name:'花卉曼陀羅祈福', price:800},
+];
+const CONCERNS = ['情緒壓力','睡眠','疲勞','腸胃','肩頸','婦科','能量提升','桃花','財運','其他'];
+const TIME_SLOTS = ['10:00','11:30','13:00','14:30','16:00','17:30','19:00'];
+const NOTICES = ['採預約制','遲到15分鐘將縮短療程','當日取消恕不退訂金','女性優先','如身體特殊狀況請提前告知'];
+const SHOP = {name_en:'Linda', name_zh:'琳達　祭司', phone:'0970881369', line_id:'@fyy2227r'};
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function fmtDate(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function todayStr(){ return fmtDate(new Date()); }
+function parseDate(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+function money(n){ return 'NT$'+n.toLocaleString(); }
+function serviceById(id){ return SERVICES.find(s=>s.id===id); }
+function addonById(id){ return ADDONS.find(a=>a.id===id); }
+function daysBetween(a,b){ return Math.round((parseDate(b)-parseDate(a))/86400000); }
+
+let toastTimer=null;
+function toast(msg){
+  let el = document.getElementById('toastEl');
+  if(!el){ el=document.createElement('div'); el.id='toastEl'; el.className='toast'; document.body.appendChild(el); }
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 2600);
+}
+
+/* ---------- API helpers ---------- */
+async function apiGet(path, admin){
+  const headers = {};
+  if(admin) headers['x-admin-token'] = adminToken;
+  const r = await fetch(path, {headers});
+  if(!r.ok) throw {status:r.status, body: await r.json().catch(()=>({}))};
+  return r.json();
+}
+async function apiPost(path, data, admin){
+  const headers = {'Content-Type':'application/json'};
+  if(admin) headers['x-admin-token'] = adminToken;
+  const r = await fetch(path, {method:'POST', headers, body: JSON.stringify(data)});
+  const body = await r.json().catch(()=>({}));
+  if(!r.ok){ const e = new Error(body.error||'請求失敗'); e.status=r.status; e.body=body; throw e; }
+  return body;
+}
+
+/* ---------- ICS 匯出（給客戶個人下載加入手機日曆） ---------- */
+function downloadICS(b){
+  const svc = serviceById(b.serviceId);
+  const [hh,mm] = b.time.split(':').map(Number);
+  const start = parseDate(b.date); start.setHours(hh,mm,0,0);
+  const end = new Date(start.getTime() + svc.duration*60000);
+  const fmt = d => d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'T'+pad(d.getHours())+pad(d.getMinutes())+'00';
+  const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//SoulBlueprintSpa//Booking//ZH-TW','BEGIN:VEVENT',
+    'UID:'+b.id+'@soulblueprintspa','DTSTAMP:'+fmt(new Date()),'DTSTART:'+fmt(start),'DTEND:'+fmt(end),
+    'SUMMARY:靈魂藍圖SPA｜'+svc.name,'DESCRIPTION:預約人 '+b.customer.name+'　電話 '+b.customer.phone,
+    'LOCATION:靈魂藍圖 SPA','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = '靈魂藍圖SPA預約-'+b.date+'.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+/* =========================================================
+   APP STATE
+   ========================================================= */
+const root = document.getElementById('root');
+let view = location.hash === '#admin' ? 'admin' : 'booking';
+let adminUnlocked = false;
+let adminToken = '';
+let adminTab = 'today';
+let adminData = {monthBookings:[], allBookings:null, customers:null};
+
+let step = 1;
+let sel = {serviceId:null, addons:[], date:null, time:null, name:'', phone:'', line:'', birthday:'', firstTime:null, concerns:[], note:''};
+let calMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let monthAvailability = {}; // {'YYYY-MM': [{date,time,status}, ...]}
+let confirmedBooking = null;
+
+window.addEventListener('hashchange', ()=>{ view = location.hash === '#admin' ? 'admin' : 'booking'; render(); });
+
+function render(){ view === 'admin' ? renderAdminRoot() : renderBookingRoot(); }
+render();
+
+/* =========================================================
+   顧客端
+   ========================================================= */
+function monthKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1); }
+
+async function ensureMonthLoaded(mKey, force){
+  if(!force && monthAvailability[mKey]) return monthAvailability[mKey];
+  try{
+    monthAvailability[mKey] = await apiGet('/api/bookings?month='+mKey, false);
+  }catch(e){
+    monthAvailability[mKey] = [];
+  }
+  return monthAvailability[mKey];
+}
+function slotsFor(dateStr){
+  const mKey = dateStr.slice(0,7);
+  const list = monthAvailability[mKey] || [];
+  const taken = new Set(list.filter(b=>b.date===dateStr).map(b=>b.time));
+  return TIME_SLOTS.map(t=>({time:t, taken: taken.has(t)}));
+}
+function isDateFull(dateStr){ return slotsFor(dateStr).every(s=>s.taken); }
+
+function renderBookingRoot(){
+  root.innerHTML = `
+    <div class="app">
+      <div class="hero">
+        <div class="stars"><span style="top:14px;left:18%;">✦</span><span style="top:40px;right:14%;">✦</span><span style="bottom:20px;left:10%;">✧</span><span style="top:70%;right:22%;">✧</span></div>
+        <img class="hero-logo" src="/assets/logo.jpg" alt="靈魂藍圖SPA">
+        <h1>靈魂藍圖 SPA</h1>
+        <div class="sub">SOUL BLUEPRINT</div>
+        <div class="divider"></div>
+        <div class="tagline">身體開運・情緒 SPA・塔羅引導<br>花卉曼陀羅・頌缽<br>讓身心回到最好的頻率</div>
+      </div>
+      <div class="steps">${[1,2,3,4,5].map(n=>`<div class="step-dot ${n===step?'active':n<step?'done':''}"></div>`).join('')}</div>
+      <div id="stepBody"><div style="padding:40px;text-align:center;color:#9b3a72;">載入中...</div></div>
+      <div class="foot"><a href="#admin">管理後台</a></div>
+    </div>`;
+  renderStep();
+}
+
+async function renderStep(){
+  const body = document.getElementById('stepBody');
+  if(step===1) return body.innerHTML = stepService();
+  if(step===2){ await ensureMonthLoaded(monthKey(calMonth), true); return body.innerHTML = stepDate(); }
+  if(step===3){ if(sel.date) await ensureMonthLoaded(sel.date.slice(0,7), true); return body.innerHTML = stepTime(); }
+  if(step===4) return body.innerHTML = stepForm();
+  if(step===5) return renderConfirmScreen();
+}
+
+function stepService(){
+  return `
+  <div class="section"><div class="card">
+    <div class="section-title"><span class="num">01</span><h2>選擇服務</h2></div>
+    ${SERVICES.map(sv=>`
+      <div class="service ${sel.serviceId===sv.id?'selected':''}" onclick="pickService('${sv.id}')">
+        <div class="service-top">
+          <div><div class="service-name">${sv.name}</div><div class="service-meta">${sv.duration} 分鐘</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div class="service-price accent-en">${money(sv.price)}</div><div class="radio-dot"></div></div>
+        </div>
+        <div class="service-desc">${sv.desc}</div>
+      </div>`).join('')}
+  </div>
+  <div class="card" style="margin-top:14px;">
+    <div class="section-title"><span class="num">＋</span><h2>加購服務</h2><span class="opt">選填</span></div>
+    ${ADDONS.map(a=>`
+      <div class="addon ${sel.addons.includes(a.id)?'checked':''}" onclick="toggleAddon('${a.id}')">
+        <div class="checkbox"></div><div class="addon-name">${a.name}</div>
+        <div style="margin-left:auto;font-size:12px;color:#6b5a75;">+${money(a.price)}</div>
+      </div>`).join('')}
+  </div>
+  <div class="section" style="padding-top:18px;"><button class="btn btn-primary" ${!sel.serviceId?'disabled':''} onclick="goStep(2)">下一步：選擇日期</button></div>
+  </div>`;
+}
+function pickService(id){ sel.serviceId = id; renderStep(); }
+function toggleAddon(id){ const i=sel.addons.indexOf(id); if(i>-1) sel.addons.splice(i,1); else sel.addons.push(id); renderStep(); }
+
+function stepDate(){
+  const y = calMonth.getFullYear(), m = calMonth.getMonth();
+  const first = new Date(y,m,1);
+  const startOffset = first.getDay();
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  const today = todayStr();
+  let cells = '';
+  for(let i=0;i<startOffset;i++) cells += `<div class="cal-cell"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = fmtDate(new Date(y,m,d));
+    const isPast = dateStr < today;
+    const full = !isPast && isDateFull(dateStr);
+    const isToday = dateStr === today;
+    const isSel = sel.date === dateStr;
+    let cls = 'cal-day';
+    if(isPast) cls += ' past'; else if(full) cls += ' full'; else cls += ' available';
+    if(isToday) cls += ' today';
+    if(isSel) cls += ' selected';
+    cells += `<div class="cal-cell"><button class="${cls}" ${(isPast||full)?'disabled':''} onclick="pickDate('${dateStr}')">${d}</button></div>`;
+  }
+  const dow = ['日','一','二','三','四','五','六'];
+  return `
+  <div class="section"><div class="card">
+    <div class="section-title"><span class="num">02</span><h2>選擇日期</h2></div>
+    <div class="cal-head"><button class="cal-nav" onclick="shiftMonth(-1)">‹</button><div class="cal-month">${y} 年 ${m+1} 月</div><button class="cal-nav" onclick="shiftMonth(1)">›</button></div>
+    <div class="cal-grid">${dow.map(d=>`<div class="cal-dow">${d}</div>`).join('')}${cells}</div>
+    <div class="cal-legend">
+      <span><span class="legend-dot" style="background:linear-gradient(135deg,#d4548a,#4a2a5e);"></span>已選擇</span>
+      <span><span class="legend-dot" style="background:#faf6f3;border:1px solid #e4d8de;"></span>可預約</span>
+      <span><span class="legend-dot" style="background:#d7cdd2;"></span>已額滿／過去</span>
+    </div>
+  </div>
+  <div class="section" style="padding-top:18px;"><div class="btn-row">
+    <button class="btn btn-ghost" onclick="goStep(1)">上一步</button>
+    <button class="btn btn-primary" ${!sel.date?'disabled':''} onclick="goStep(3)">下一步：選擇時段</button>
+  </div></div></div>`;
+}
+async function shiftMonth(dir){
+  calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+dir, 1);
+  const now = new Date(); now.setDate(1); now.setHours(0,0,0,0);
+  if(calMonth < now) calMonth = now;
+  await ensureMonthLoaded(monthKey(calMonth), true);
+  document.getElementById('stepBody').innerHTML = stepDate();
+}
+function pickDate(d){ sel.date = d; sel.time = null; renderStep(); }
+
+function stepTime(){
+  const slots = sel.date ? slotsFor(sel.date) : [];
+  return `
+  <div class="section"><div class="card">
+    <div class="section-title"><span class="num">03</span><h2>選擇時段</h2><span class="opt">${sel.date||''}</span></div>
+    <div class="slots">${slots.length ? slots.map(s=>`
+      <div class="slot ${s.taken?'taken':''} ${sel.time===s.time?'selected':''}" onclick="${s.taken?'':`pickTime('${s.time}')`}">${s.time}${s.taken?'<br><span style="font-size:10px;">已預約</span>':''}</div>
+    `).join('') : `<div class="slot-empty">請先選擇日期</div>`}</div>
+  </div>
+  <div class="section" style="padding-top:18px;"><div class="btn-row">
+    <button class="btn btn-ghost" onclick="goStep(2)">上一步</button>
+    <button class="btn btn-primary" ${!sel.time?'disabled':''} onclick="goStep(4)">下一步：填寫資料</button>
+  </div></div></div>`;
+}
+function pickTime(t){ sel.time = t; renderStep(); }
+
+function stepForm(){
+  return `
+  <div class="section"><div class="card">
+    <div class="section-title"><span class="num">04</span><h2>填寫資料</h2></div>
+    <div class="field"><label>姓名</label><input type="text" id="f_name" value="${sel.name}" placeholder="怎麼稱呼您"></div>
+    <div class="field"><label>電話</label><input type="tel" id="f_phone" value="${sel.phone}" placeholder="方便聯絡的電話"></div>
+    <div class="field"><label>LINE ID</label><input type="text" id="f_line" value="${sel.line}" placeholder="您的 LINE ID"></div>
+    <div class="field"><label>生日（選填）</label><input type="text" id="f_bday" value="${sel.birthday}" placeholder="例如 1990-01-01"></div>
+    <div class="field"><label>是否第一次來店</label><div class="toggle-row">
+      <div class="pill ${sel.firstTime===true?'on':''}" onclick="setFirstTime(true)">第一次</div>
+      <div class="pill ${sel.firstTime===false?'on':''}" onclick="setFirstTime(false)">曾經來過</div>
+    </div></div>
+    <div class="field"><label>今天最想改善的是？（可複選）</label><div class="pill-group">
+      ${CONCERNS.map(c=>`<div class="pill ${sel.concerns.includes(c)?'on':''}" onclick="toggleConcern('${c}')">${c}</div>`).join('')}
+    </div></div>
+    <div class="field"><label>今天想告訴琳達什麼</label><textarea id="f_note" placeholder="留言（選填）">${sel.note}</textarea></div>
+  </div>
+  <div class="card" style="margin-top:14px;">
+    <div class="section-title"><span class="num">05</span><h2>預約須知</h2></div>
+    ${NOTICES.map(n=>`<div style="font-size:12.5px;color:#6b5a75;padding:4px 0;">✔ ${n}</div>`).join('')}
+  </div>
+  <div class="section" style="padding-top:18px;"><div class="btn-row">
+    <button class="btn btn-ghost" onclick="goStep(3)">上一步</button>
+    <button class="btn btn-primary" id="submitBtn" onclick="reviewAndSubmit()">確認送出預約</button>
+  </div></div></div>`;
+}
+function setFirstTime(v){ sel.firstTime = v; renderStep(); }
+function toggleConcern(c){ const i=sel.concerns.indexOf(c); if(i>-1) sel.concerns.splice(i,1); else sel.concerns.push(c); renderStep(); }
+function readFormFields(){
+  sel.name = document.getElementById('f_name').value.trim();
+  sel.phone = document.getElementById('f_phone').value.trim();
+  sel.line = document.getElementById('f_line').value.trim();
+  sel.birthday = document.getElementById('f_bday').value.trim();
+  sel.note = document.getElementById('f_note').value.trim();
+}
+
+async function reviewAndSubmit(){
+  readFormFields();
+  if(!sel.name || !sel.phone){ toast('請填寫姓名與電話'); return; }
+  const btn = document.getElementById('submitBtn');
+  if(btn){ btn.disabled = true; btn.textContent = '送出中...'; }
+  const svc = serviceById(sel.serviceId);
+  const addonTotal = sel.addons.reduce((sum,id)=>sum + addonById(id).price, 0);
+  const payload = {
+    serviceId: sel.serviceId, addons: [...sel.addons], date: sel.date, time: sel.time,
+    price: svc.price + addonTotal,
+    customer: {name:sel.name, phone:sel.phone, line:sel.line, birthday:sel.birthday, firstTime: sel.firstTime},
+    concerns: [...sel.concerns], note: sel.note,
+  };
+  try{
+    const booking = await apiPost('/api/bookings', payload, false);
+    confirmedBooking = booking;
+    step = 5; render();
+  }catch(e){
+    if(e.status === 409){
+      toast('這個時段剛剛被預約走了，請重新選擇時段');
+      sel.time = null; step = 3; render();
+    } else {
+      toast('送出失敗，請稍後再試');
+      if(btn){ btn.disabled=false; btn.textContent='確認送出預約'; }
+    }
+  }
+}
+
+function renderConfirmScreen(){
+  const body = document.getElementById('stepBody');
+  const svc = serviceById(confirmedBooking.serviceId);
+  body.innerHTML = `
+  <div class="confirm-wrap">
+    <div class="confirm-icon">🌿</div><h2>謝謝您的預約</h2>
+    <p>琳達已收到您的預約申請<br>確認後會透過 LINE 與您聯絡<br>期待與您相見</p>
+    <div class="summary" style="text-align:left;margin-top:20px;">
+      <div><b>服務</b>　${svc.name}${confirmedBooking.addons.length?'　+'+confirmedBooking.addons.map(id=>addonById(id).name).join('、'):''}</div>
+      <div><b>日期</b>　${confirmedBooking.date}</div><div><b>時段</b>　${confirmedBooking.time}</div>
+      <div><b>金額</b>　${money(confirmedBooking.price)}</div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:20px;" onclick="downloadICS(confirmedBooking)">加入手機日曆提醒</button>
+    <div class="notice-card"><h3>預約須知</h3>${NOTICES.map(n=>`<div>✔ ${n}</div>`).join('')}</div>
+    <div class="contact-card">
+      <div class="name-en accent-en">${SHOP.name_en}</div><div class="name-zh">${SHOP.name_zh}</div>
+      <img src="/assets/line-qr.jpg" alt="LINE QR">
+      <div class="phone">${SHOP.phone}　｜　LINE ${SHOP.line_id}</div>
+    </div>
+    <button class="btn btn-ghost" style="margin-top:22px;" onclick="startOver()">再預約一筆</button>
+  </div>`;
+}
+function startOver(){
+  sel = {serviceId:null, addons:[], date:null, time:null, name:'', phone:'', line:'', birthday:'', firstTime:null, concerns:[], note:''};
+  step = 1; confirmedBooking = null; render();
+}
+async function goStep(n){ window.scrollTo(0,0); step = n; document.getElementById('stepBody').innerHTML = `<div style="padding:40px;text-align:center;color:#9b3a72;">載入中...</div>`; await renderStep(); }
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+function renderAdminRoot(){
+  if(!adminUnlocked) return renderAdminLock();
+  root.innerHTML = `
+    <div class="admin">
+      <div class="admin-top"><h1>靈魂藍圖 SPA｜後台管理</h1><a href="#" onclick="adminUnlocked=false;adminToken='';render();return false;">登出</a></div>
+      <div class="tabs">${tabBtn('today','今日預約')}${tabBtn('all','全部預約')}${tabBtn('customers','客戶資料')}${tabBtn('stats','收入統計')}${tabBtn('followup','回訪提醒')}${tabBtn('calendar','行事曆訂閱')}</div>
+      <div class="admin-body" id="adminBody"><div class="empty-state">載入中...</div></div>
+      <div class="foot"><a href="#" onclick="location.hash='';return false;">回到預約頁</a></div>
+    </div>`;
+  renderAdminTab();
+}
+function tabBtn(id,label){ return `<div class="tab ${adminTab===id?'active':''}" onclick="setAdminTab('${id}')">${label}</div>`; }
+function setAdminTab(id){ adminTab = id; renderAdminTab(); }
+
+function renderAdminLock(){
+  root.innerHTML = `
+  <div class="admin-lock"><div class="lock-card">
+    <h2>🔒 後台登入</h2>
+    <input type="password" id="pinInput" placeholder="輸入管理密碼">
+    <div class="lock-err" id="pinErr"></div>
+    <button class="btn btn-primary" onclick="checkPin()">登入</button>
+    <div style="margin-top:14px;"><a href="#" onclick="location.hash='';return false;" style="font-size:11.5px;color:#9b3a72;">回到預約頁</a></div>
+  </div></div>`;
+  document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+}
+async function checkPin(){
+  const v = document.getElementById('pinInput').value;
+  try{
+    await apiPost('/api/admin-login', {password:v}, false);
+    adminToken = v; adminUnlocked = true; render();
+  }catch(e){
+    document.getElementById('pinErr').textContent = e.body && e.body.error ? e.body.error : '密碼錯誤';
+  }
+}
+
+async function renderAdminTab(){
+  const el = document.getElementById('adminBody');
+  el.innerHTML = `<div class="empty-state">載入中...</div>`;
+  try{
+    if(adminTab==='today') return renderAdminToday(el);
+    if(adminTab==='all') return renderAdminAll(el);
+    if(adminTab==='customers') return renderAdminCustomers(el);
+    if(adminTab==='stats') return renderAdminStats(el);
+    if(adminTab==='followup') return renderAdminFollowup(el);
+    if(adminTab==='calendar') return renderAdminCalendar(el);
+  }catch(e){
+    el.innerHTML = `<div class="empty-state">讀取失敗：${(e.body&&e.body.error)||e.message||'未知錯誤'}</div>`;
+  }
+}
+
+async function renderAdminToday(el){
+  const today = todayStr();
+  const list = await apiGet('/api/bookings?month='+today.slice(0,7), true);
+  const todays = list.filter(b=>b.date===today && b.status!=='cancelled').sort((a,b)=>a.time.localeCompare(b.time));
+  el.innerHTML = `<h3 style="font-family:'Noto Serif TC',serif;color:#4a2a5e;margin-bottom:12px;">${today} 今日預約（共 ${todays.length} 筆）</h3>` +
+    (todays.length ? todays.map(bookingItem).join('') : `<div class="empty-state">今天目前還沒有預約</div>`);
+}
+
+async function loadAllBookings(force){
+  if(!adminData.allBookings || force) adminData.allBookings = await apiGet('/api/bookings-all', true);
+  return adminData.allBookings;
+}
+async function loadAllCustomers(force){
+  if(!adminData.customers || force) adminData.customers = await apiGet('/api/customers', true);
+  return adminData.customers;
+}
+
+async function renderAdminAll(el){
+  const list = (await loadAllBookings()).slice().sort((a,b)=> (b.date+b.time).localeCompare(a.date+a.time));
+  el.innerHTML = `<input class="search-bar" id="allSearch" placeholder="搜尋姓名或電話" oninput="filterAll(this.value)">` +
+    `<div id="allList">` + (list.length ? list.map(bookingItem).join('') : `<div class="empty-state">目前沒有任何預約</div>`) + `</div>`;
+  window.__allBookingsCache = list;
+}
+function filterAll(q){
+  q = q.trim();
+  const list = window.__allBookingsCache.filter(b=> !q || b.customer.name.includes(q) || b.customer.phone.includes(q));
+  document.getElementById('allList').innerHTML = list.length ? list.map(bookingItem).join('') : `<div class="empty-state">找不到符合的預約</div>`;
+}
+function bookingItem(b){
+  const svc = serviceById(b.serviceId);
+  const addonNames = (b.addons||[]).map(id=>addonById(id).name);
+  return `
+  <div class="list-item">
+    <div class="li-top"><div class="li-name">${b.customer.name}</div><div class="li-time">${b.date} ${b.time}</div></div>
+    <div class="li-meta">${svc?svc.name:b.serviceId}　${money(b.price)}　${b.customer.phone}${b.customer.line?'　LINE '+b.customer.line:''}</div>
+    ${addonNames.length?`<div class="li-meta">加購：${addonNames.join('、')}</div>`:''}
+    ${b.concerns && b.concerns.length ? `<div>${b.concerns.map(c=>`<span class="tag-sm">${c}</span>`).join('')}</div>` : ''}
+    ${b.note ? `<div class="li-meta">留言：${b.note}</div>` : ''}
+    <div class="row-between">
+      <span style="font-size:11px;color:${b.status==='cancelled'?'#b3543f':'#5c8a6a'};">${b.status==='cancelled'?'已取消':'已確認'}</span>
+      ${b.status!=='cancelled' ? `<button class="mini-btn" onclick="cancelBooking('${b.id}','${b.date}')">取消預約</button>` : ''}
+    </div>
+  </div>`;
+}
+async function cancelBooking(id, date){
+  if(!confirm('確定要取消這筆預約嗎？')) return;
+  try{
+    await apiPost('/api/bookings-admin', {id, date}, true);
+    toast('已取消');
+    delete monthAvailability[date.slice(0,7)];
+    await loadAllBookings(true);
+    renderAdminTab();
+  }catch(e){ toast('取消失敗'); }
+}
+
+async function renderAdminCustomers(el){
+  const list = (await loadAllCustomers()).slice().sort((a,b)=> {
+    const la = (a.visits&&a.visits.length)?a.visits[a.visits.length-1].date:'';
+    const lb = (b.visits&&b.visits.length)?b.visits[b.visits.length-1].date:'';
+    return lb.localeCompare(la);
+  });
+  el.innerHTML = `<input class="search-bar" id="custSearch" placeholder="搜尋姓名或電話" oninput="filterCust(this.value)">` +
+    `<div id="custList">` + (list.length ? list.map(customerItem).join('') : `<div class="empty-state">目前沒有客戶資料</div>`) + `</div>`;
+  window.__custCache = list;
+}
+function filterCust(q){
+  q = q.trim();
+  const list = window.__custCache.filter(c=> !q || c.name.includes(q) || c.phone.includes(q));
+  document.getElementById('custList').innerHTML = list.length ? list.map(customerItem).join('') : `<div class="empty-state">找不到符合的客戶</div>`;
+}
+function customerItem(c){
+  const last = c.visits && c.visits.length ? c.visits[c.visits.length-1] : null;
+  return `
+  <div class="list-item">
+    <div class="li-top"><div class="li-name">${c.name}</div><div style="font-size:11.5px;color:#6b5a75;">共 ${(c.visits||[]).length} 次</div></div>
+    <div class="li-meta">${c.phone}${c.line?'　LINE '+c.line:''}${c.birthday?'　生日 '+c.birthday:''}</div>
+    <div class="li-meta">最近一次：${last?last.date+' '+(serviceById(last.serviceId)?serviceById(last.serviceId).name:last.serviceId):'—'}</div>
+    <div class="li-meta">儲值餘額 <b style="color:#9b3a72;">${money(c.balance||0)}</b>　剩餘堂數 <b style="color:#9b3a72;">${c.sessionsRemaining||0}</b></div>
+    <div class="row-between">
+      <button class="mini-btn" onclick="openLedger('${c.phone}')">儲值 / 堂數</button>
+      <button class="mini-btn primary" onclick="copyFollowup('${c.phone}')">複製關心訊息</button>
+    </div>
+  </div>`;
+}
+function openLedger(phone){
+  const c = window.__custCache.find(x=>x.phone===phone);
+  const modalBg = document.createElement('div');
+  modalBg.className = 'modal-bg';
+  modalBg.innerHTML = `
+    <div class="modal">
+      <span class="modal-close" onclick="this.closest('.modal-bg').remove()">關閉 ✕</span>
+      <h3>${c.name}　儲值 / 堂數調整</h3>
+      <div class="field"><label>目前儲值餘額</label><input type="text" id="ledgerBalance" value="${c.balance||0}"></div>
+      <div class="field"><label>目前剩餘堂數</label><input type="text" id="ledgerSessions" value="${c.sessionsRemaining||0}"></div>
+      <div class="field"><label>備註（例如：儲值 NT$5000）</label><input type="text" id="ledgerNote" placeholder="這筆調整的說明"></div>
+      <button class="btn btn-primary" onclick="saveLedger('${phone}')">儲存</button>
+    </div>`;
+  document.body.appendChild(modalBg);
+}
+async function saveLedger(phone){
+  const balance = Number(document.getElementById('ledgerBalance').value) || 0;
+  const sessionsRemaining = Number(document.getElementById('ledgerSessions').value) || 0;
+  const note = document.getElementById('ledgerNote').value.trim();
+  try{
+    await apiPost('/api/customers', {phone, balance, sessionsRemaining, note}, true);
+    document.querySelector('.modal-bg').remove();
+    toast('已更新');
+    await loadAllCustomers(true);
+    renderAdminTab();
+  }catch(e){ toast('更新失敗'); }
+}
+function copyFollowup(phone){
+  const c = window.__custCache.find(x=>x.phone===phone);
+  const msg = `${c.name}您好，我是靈魂藍圖SPA的琳達，想關心一下您這幾天感覺如何，身體都還好嗎？`;
+  navigator.clipboard.writeText(msg).then(()=>toast('已複製，貼到 LINE 傳送給客人')).catch(()=>toast('複製失敗，請手動選取文字'));
+}
+
+async function renderAdminStats(el){
+  const today = todayStr();
+  const thisMonth = today.slice(0,7);
+  const bookings = await loadAllBookings();
+  const customers = await loadAllCustomers();
+  const confirmed = bookings.filter(b=>b.status!=='cancelled');
+  const todayRevenue = confirmed.filter(b=>b.date===today).reduce((s,b)=>s+b.price,0);
+  const monthRevenue = confirmed.filter(b=>b.date.slice(0,7)===thisMonth).reduce((s,b)=>s+b.price,0);
+  const countByService = {};
+  confirmed.forEach(b=>{ countByService[b.serviceId] = (countByService[b.serviceId]||0)+1; });
+  let popular = '—';
+  const topEntry = Object.entries(countByService).sort((a,b)=>b[1]-a[1])[0];
+  if(topEntry) popular = (serviceById(topEntry[0])?serviceById(topEntry[0]).name:topEntry[0]) + '（' + topEntry[1] + ' 次）';
+
+  const monthBookings = confirmed.filter(b=>b.date.slice(0,7)===thisMonth);
+  const monthCustomerPhones = [...new Set(monthBookings.map(b=>b.customer.phone))];
+  let newCount = 0, returnCount = 0;
+  monthCustomerPhones.forEach(phone=>{
+    const c = customers.find(x=>x.phone===phone);
+    const firstVisitDate = c && c.visits.length ? c.visits.map(v=>v.date).sort()[0] : null;
+    if(firstVisitDate && firstVisitDate.slice(0,7)===thisMonth) newCount++; else returnCount++;
+  });
+  const totalM = newCount+returnCount || 1;
+  const newRatio = Math.round(newCount/totalM*100);
+  const returnRatio = Math.round(returnCount/totalM*100);
+
+  el.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat"><div class="label">今日收入</div><div class="value accent-en">${money(todayRevenue)}</div></div>
+      <div class="stat"><div class="label">本月收入</div><div class="value accent-en">${money(monthRevenue)}</div></div>
+      <div class="stat"><div class="label">熱門課程</div><div class="value" style="font-size:15px;">${popular}</div></div>
+      <div class="stat"><div class="label">回流率（本月）</div><div class="value accent-en">${returnRatio}<small>%</small></div></div>
+      <div class="stat" style="grid-column:1/-1;"><div class="label">新客比例（本月）</div><div class="value accent-en">${newRatio}<small>% ・ 共 ${totalM} 位客人</small></div></div>
+    </div>
+    <div style="font-size:11px;color:#6b5a75;line-height:1.8;">統計以「已確認」預約計算，取消的預約不計入。加購金額已併入服務金額計算。</div>`;
+}
+
+async function renderAdminFollowup(el){
+  const today = todayStr();
+  const customers = await loadAllCustomers();
+  const candidates = customers.filter(c=>{
+    if(!c.visits || !c.visits.length) return false;
+    const lastDate = c.visits.map(v=>v.date).sort().slice(-1)[0];
+    return daysBetween(lastDate, today) >= 7;
+  }).sort((a,b)=>{
+    const la = a.visits.map(v=>v.date).sort().slice(-1)[0];
+    const lb = b.visits.map(v=>v.date).sort().slice(-1)[0];
+    return la.localeCompare(lb);
+  });
+  window.__custCache = customers;
+  el.innerHTML = `
+    <div style="font-size:11.5px;color:#6b5a75;margin-bottom:14px;line-height:1.8;">
+      以下客人最近一次到店已經 7 天以上、目前沒有新的預約。這裡不會自動發送 LINE，按「複製關心訊息」把文字複製好，貼到 LINE 手動傳送給客人。
+    </div>
+    ${candidates.length ? candidates.map(c=>{
+      const lastDate = c.visits.map(v=>v.date).sort().slice(-1)[0];
+      const gap = daysBetween(lastDate, today);
+      return `<div class="list-item">
+        <div class="li-top"><div class="li-name">${c.name}</div><div style="font-size:11.5px;color:#b3543f;">已 ${gap} 天未回訪</div></div>
+        <div class="li-meta">${c.phone}${c.line?'　LINE '+c.line:''}　最近一次 ${lastDate}</div>
+        <div class="row-between"><span></span><button class="mini-btn primary" onclick="copyFollowup('${c.phone}')">複製關心訊息</button></div>
+      </div>`;
+    }).join('') : `<div class="empty-state">目前沒有需要回訪提醒的客人</div>`}`;
+}
+
+function renderAdminCalendar(el){
+  const url = location.origin + '/api/calendar?key=' + encodeURIComponent(adminToken);
+  el.innerHTML = `
+    <div style="font-size:12.5px;color:#6b5a75;line-height:1.9;">
+      把下面這個網址加到 Google 日曆的「透過網址新增」，就能在手機或電腦上訂閱看到未來三個月的預約。
+      Google 那邊是排程更新，不是即時的，通常會間隔幾小時到接近一天才會刷新一次。
+    </div>
+    <div class="cal-sub">${url}</div>
+    <button class="mini-btn" style="margin-top:10px;" onclick="navigator.clipboard.writeText('${url}').then(()=>toast('已複製網址'))">複製網址</button>`;
+}
+
+/* boot */
+</script>
+</body>
+</html>
