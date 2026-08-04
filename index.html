@@ -421,8 +421,8 @@ function stepForm(){
     <button class="btn btn-primary" id="submitBtn" onclick="reviewAndSubmit()">確認送出預約</button>
   </div></div></div>`;
 }
-function setFirstTime(v){ sel.firstTime = v; renderStep(); }
-function toggleConcern(c){ const i=sel.concerns.indexOf(c); if(i>-1) sel.concerns.splice(i,1); else sel.concerns.push(c); renderStep(); }
+function setFirstTime(v){ readFormFields(); sel.firstTime = v; renderStep(); }
+function toggleConcern(c){ readFormFields(); const i=sel.concerns.indexOf(c); if(i>-1) sel.concerns.splice(i,1); else sel.concerns.push(c); renderStep(); }
 function readFormFields(){
   sel.name = document.getElementById('f_name').value.trim();
   sel.phone = document.getElementById('f_phone').value.trim();
