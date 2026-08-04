@@ -159,6 +159,15 @@ a{color:inherit;}
 .modal h3{font-size:15px;color:var(--plum-deep);margin-bottom:14px;}
 .modal-close{float:right;color:var(--ink-soft);cursor:pointer;font-size:13px;}
 .cal-sub{font-size:11px;color:var(--ink-soft);word-break:break-all;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px;}
+.admin-cal-day{width:100%;height:100%;border-radius:12px;border:1px solid var(--line);background:#fdfbfa;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;transition:.15s;padding:4px 0;}
+.admin-cal-day .acd-num{font-size:12.5px;color:var(--ink);}
+.admin-cal-day .acd-badge{font-size:10px;font-weight:700;color:#fff;background:var(--rose);border-radius:8px;padding:1px 6px;line-height:1.4;}
+.admin-cal-day.today{border-color:var(--gold);}
+.admin-cal-day.selected{border-color:var(--plum);box-shadow:0 0 0 2px var(--plum) inset;}
+.admin-cal-day.lv1 .acd-badge{background:#e6bcd0;color:var(--plum-deep);}
+.admin-cal-day.lv2 .acd-badge{background:var(--rose);}
+.admin-cal-day.lv3{background:#fbeef3;}
+.admin-cal-day.lv3 .acd-badge{background:var(--plum);}
 </style>
 </head>
 <body>
@@ -245,6 +254,9 @@ let adminUnlocked = false;
 let adminToken = '';
 let adminTab = 'today';
 let adminData = {monthBookings:[], allBookings:null, customers:null};
+let adminCalMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let adminCalSelectedDate = null;
+let adminCalMonthData = null; // 目前月曆總覽正在顯示的月份資料（admin完整欄位）
 
 let step = 1;
 let sel = {serviceId:null, addons:[], date:null, time:null, name:'', phone:'', line:'', birthday:'', firstTime:null, concerns:[], note:''};
@@ -495,7 +507,7 @@ function renderAdminRoot(){
   root.innerHTML = `
     <div class="admin">
       <div class="admin-top"><h1>靈魂藍圖 SPA｜後台管理</h1><a href="#" onclick="adminUnlocked=false;adminToken='';render();return false;">登出</a></div>
-      <div class="tabs">${tabBtn('today','今日預約')}${tabBtn('all','全部預約')}${tabBtn('customers','客戶資料')}${tabBtn('stats','收入統計')}${tabBtn('followup','回訪提醒')}${tabBtn('calendar','行事曆訂閱')}</div>
+      <div class="tabs">${tabBtn('today','今日預約')}${tabBtn('calview','月曆總覽')}${tabBtn('all','全部預約')}${tabBtn('customers','客戶資料')}${tabBtn('stats','收入統計')}${tabBtn('followup','回訪提醒')}${tabBtn('calendar','行事曆訂閱')}</div>
       <div class="admin-body" id="adminBody"><div class="empty-state">載入中...</div></div>
       <div class="foot"><a href="#" onclick="location.hash='';return false;">回到預約頁</a></div>
     </div>`;
@@ -530,6 +542,7 @@ async function renderAdminTab(){
   el.innerHTML = `<div class="empty-state">載入中...</div>`;
   try{
     if(adminTab==='today') return renderAdminToday(el);
+    if(adminTab==='calview') return renderAdminCalview(el);
     if(adminTab==='all') return renderAdminAll(el);
     if(adminTab==='customers') return renderAdminCustomers(el);
     if(adminTab==='stats') return renderAdminStats(el);
@@ -546,6 +559,59 @@ async function renderAdminToday(el){
   const todays = list.filter(b=>b.date===today && b.status!=='cancelled').sort((a,b)=>a.time.localeCompare(b.time));
   el.innerHTML = `<h3 style="font-family:'Noto Serif TC',serif;color:#4a2a5e;margin-bottom:12px;">${today} 今日預約（共 ${todays.length} 筆）</h3>` +
     (todays.length ? todays.map(bookingItem).join('') : `<div class="empty-state">今天目前還沒有預約</div>`);
+}
+
+async function renderAdminCalview(el){
+  const mKey = monthKey(adminCalMonth);
+  adminCalMonthData = await apiGet('/api/bookings?month='+mKey, true);
+  el.innerHTML = calviewGridHTML() + `<div id="calviewDayList">${calviewDayListHTML()}</div>`;
+}
+function calviewGridHTML(){
+  const y = adminCalMonth.getFullYear(), m = adminCalMonth.getMonth();
+  const first = new Date(y,m,1);
+  const startOffset = first.getDay();
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  const today = todayStr();
+  const list = (adminCalMonthData||[]).filter(b=>b.status!=='cancelled');
+  const countByDate = {};
+  list.forEach(b=>{ countByDate[b.date] = (countByDate[b.date]||0)+1; });
+  let cells = '';
+  for(let i=0;i<startOffset;i++) cells += `<div class="cal-cell"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = fmtDate(new Date(y,m,d));
+    const count = countByDate[dateStr] || 0;
+    const isToday = dateStr === today;
+    const isSel = adminCalSelectedDate === dateStr;
+    let level = count===0 ? '' : count<=2 ? 'lv1' : count<=4 ? 'lv2' : 'lv3';
+    cells += `<div class="cal-cell"><button class="admin-cal-day ${level} ${isToday?'today':''} ${isSel?'selected':''}" onclick="selectAdminCalDay('${dateStr}')">
+      <span class="acd-num">${d}</span>${count>0?`<span class="acd-badge">${count}</span>`:''}
+    </button></div>`;
+  }
+  const dow = ['日','一','二','三','四','五','六'];
+  return `
+    <div class="cal-head"><button class="cal-nav" onclick="shiftAdminCalMonth(-1)">‹</button><div class="cal-month">${y} 年 ${m+1} 月</div><button class="cal-nav" onclick="shiftAdminCalMonth(1)">›</button></div>
+    <div class="cal-grid">${dow.map(d=>`<div class="cal-dow">${d}</div>`).join('')}${cells}</div>
+    <div class="cal-legend">
+      <span><span class="legend-dot" style="background:#f2eeef;"></span>沒有預約</span>
+      <span><span class="legend-dot" style="background:#e6bcd0;"></span>1-2位</span>
+      <span><span class="legend-dot" style="background:#d4548a;"></span>3-4位</span>
+      <span><span class="legend-dot" style="background:#7a3f7f;"></span>5位以上</span>
+    </div>`;
+}
+function calviewDayListHTML(){
+  if(!adminCalSelectedDate) return `<div class="empty-state">點選上面的日期，看當天有哪些客戶預約</div>`;
+  const list = (adminCalMonthData||[]).filter(b=>b.date===adminCalSelectedDate && b.status!=='cancelled').sort((a,b)=>a.time.localeCompare(b.time));
+  return `<h3 style="font-family:'Noto Serif TC',serif;color:#4a2a5e;margin:16px 0 12px;">${adminCalSelectedDate}　共 ${list.length} 位</h3>` +
+    (list.length ? list.map(bookingItem).join('') : `<div class="empty-state">這天目前沒有預約</div>`);
+}
+function selectAdminCalDay(d){
+  adminCalSelectedDate = d;
+  document.getElementById('adminBody').innerHTML = calviewGridHTML() + `<div id="calviewDayList">${calviewDayListHTML()}</div>`;
+}
+async function shiftAdminCalMonth(dir){
+  adminCalMonth = new Date(adminCalMonth.getFullYear(), adminCalMonth.getMonth()+dir, 1);
+  adminCalSelectedDate = null;
+  await renderAdminCalview(document.getElementById('adminBody'));
 }
 
 async function loadAllBookings(force){
