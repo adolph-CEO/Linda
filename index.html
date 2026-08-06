@@ -182,12 +182,8 @@ const SERVICES = [
   {id:'head', name:'頭部舒壓 Spa', duration:60, price:1680, desc:'睡不好・腦袋停不下來・肩頸僵硬・思緒混亂'},
   {id:'warm', name:'暖宮 Spa', duration:90, price:2500, desc:'經期不舒服・手腳冰冷・女性保養・子宮循環調理'},
 ];
-const ADDONS = [
-  {id:'bowl', name:'頌缽深度放鬆', price:300},
-  {id:'oil', name:'花油能量調頻', price:300},
-  {id:'tarot', name:'塔羅牌指引', price:500},
-  {id:'mandala', name:'花卉曼陀羅祈福', price:800},
-];
+let ADDONS = []; // 改由 /api/addons 動態載入，不再寫死
+let ADMIN_ADDONS_ALL = null; // 後台登入後載入，含已停用項目，讓歷史訂單的加購名稱能正確顯示
 const CONCERNS = ['情緒壓力','睡眠','疲勞','腸胃','肩頸','婦科','能量提升','桃花','財運','其他'];
 const TIME_SLOTS = ['10:00','11:30','13:00','14:30','16:00','17:30','19:00'];
 const NOTICES = ['採預約制','遲到15分鐘將縮短療程','當日取消恕不退訂金','女性優先','如身體特殊狀況請提前告知'];
@@ -199,7 +195,7 @@ function todayStr(){ return fmtDate(new Date()); }
 function parseDate(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
 function money(n){ return 'NT$'+n.toLocaleString(); }
 function serviceById(id){ return SERVICES.find(s=>s.id===id); }
-function addonById(id){ return ADDONS.find(a=>a.id===id); }
+function addonById(id){ const pool = ADMIN_ADDONS_ALL || ADDONS; return pool.find(a=>a.id===id) || {id, name:id, price:0}; }
 function daysBetween(a,b){ return Math.round((parseDate(b)-parseDate(a))/86400000); }
 
 let toastTimer=null;
@@ -267,7 +263,12 @@ let confirmedBooking = null;
 window.addEventListener('hashchange', ()=>{ view = location.hash === '#admin' ? 'admin' : 'booking'; render(); });
 
 function render(){ view === 'admin' ? renderAdminRoot() : renderBookingRoot(); }
-render();
+async function bootApp(){
+  root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:#9b3a72;font-family:'Noto Serif TC',serif;">靈魂藍圖 SPA 載入中...</div>`;
+  try{ ADDONS = await apiGet('/api/addons', false); }catch(e){ ADDONS = []; }
+  render();
+}
+bootApp();
 
 /* =========================================================
    顧客端
@@ -507,7 +508,7 @@ function renderAdminRoot(){
   root.innerHTML = `
     <div class="admin">
       <div class="admin-top"><h1>靈魂藍圖 SPA｜後台管理</h1><a href="#" onclick="adminUnlocked=false;adminToken='';render();return false;">登出</a></div>
-      <div class="tabs">${tabBtn('today','今日預約')}${tabBtn('calview','月曆總覽')}${tabBtn('all','全部預約')}${tabBtn('customers','客戶資料')}${tabBtn('stats','收入統計')}${tabBtn('followup','回訪提醒')}${tabBtn('calendar','行事曆訂閱')}</div>
+      <div class="tabs">${tabBtn('today','今日預約')}${tabBtn('calview','月曆總覽')}${tabBtn('all','全部預約')}${tabBtn('customers','客戶資料')}${tabBtn('addons','加購管理')}${tabBtn('stats','收入統計')}${tabBtn('followup','回訪提醒')}${tabBtn('calendar','行事曆訂閱')}</div>
       <div class="admin-body" id="adminBody"><div class="empty-state">載入中...</div></div>
       <div class="foot"><a href="#" onclick="location.hash='';return false;">回到預約頁</a></div>
     </div>`;
@@ -531,7 +532,9 @@ async function checkPin(){
   const v = document.getElementById('pinInput').value;
   try{
     await apiPost('/api/admin-login', {password:v}, false);
-    adminToken = v; adminUnlocked = true; render();
+    adminToken = v; adminUnlocked = true;
+    try{ ADMIN_ADDONS_ALL = await apiGet('/api/addons', true); }catch(e){ ADMIN_ADDONS_ALL = null; }
+    render();
   }catch(e){
     document.getElementById('pinErr').textContent = e.body && e.body.error ? e.body.error : '密碼錯誤';
   }
@@ -545,6 +548,7 @@ async function renderAdminTab(){
     if(adminTab==='calview') return renderAdminCalview(el);
     if(adminTab==='all') return renderAdminAll(el);
     if(adminTab==='customers') return renderAdminCustomers(el);
+    if(adminTab==='addons') return renderAdminAddons(el);
     if(adminTab==='stats') return renderAdminStats(el);
     if(adminTab==='followup') return renderAdminFollowup(el);
     if(adminTab==='calendar') return renderAdminCalendar(el);
@@ -721,6 +725,86 @@ function copyFollowup(phone){
   const c = window.__custCache.find(x=>x.phone===phone);
   const msg = `${c.name}您好，我是靈魂藍圖SPA的琳達，想關心一下您這幾天感覺如何，身體都還好嗎？`;
   navigator.clipboard.writeText(msg).then(()=>toast('已複製，貼到 LINE 傳送給客人')).catch(()=>toast('複製失敗，請手動選取文字'));
+}
+
+/* ---- 加購管理 ---- */
+async function renderAdminAddons(el){
+  ADMIN_ADDONS_ALL = await apiGet('/api/addons', true);
+  window.__addonsCache = ADMIN_ADDONS_ALL;
+  el.innerHTML = `
+    <button class="btn btn-primary" style="margin-bottom:16px;" onclick="openAddonEditor(null)">＋ 新增加購項目</button>
+    <div id="addonsList">${addonsListHTML()}</div>`;
+}
+function addonsListHTML(){
+  const list = window.__addonsCache || [];
+  if(!list.length) return `<div class="empty-state">目前沒有加購項目</div>`;
+  return list.map(a=>`
+    <div class="list-item">
+      <div class="li-top">
+        <div class="li-name">${a.name}${a.active===false?'　<span style="font-size:10.5px;color:#b3543f;">已停用</span>':''}</div>
+        <div class="li-time accent-en">${money(a.price)}</div>
+      </div>
+      <div class="li-meta">目前使用中的id：${a.id}（訂單資料靠這個id對應，改名不影響舊訂單）</div>
+      <div class="row-between">
+        <button class="mini-btn" onclick="toggleHistory('${a.id}')">價格歷史</button>
+        <div style="display:flex;gap:8px;">
+          <button class="mini-btn" onclick="openAddonEditor('${a.id}')">編輯</button>
+          ${a.active===false
+            ? `<button class="mini-btn primary" onclick="setAddonActive('${a.id}',true)">啟用</button>`
+            : `<button class="mini-btn" style="color:#b3543f;border-color:#e8c9c0;" onclick="setAddonActive('${a.id}',false)">停用</button>`}
+        </div>
+      </div>
+      <div id="history_${a.id}" class="hidden" style="margin-top:10px;background:#faf6f3;border-radius:10px;padding:10px;font-size:11.5px;color:#6b5a75;">
+        ${(a.priceHistory||[]).slice().reverse().map(h=>`<div>${new Date(h.changedAt).toLocaleString('zh-TW')}　${money(h.price)}${h.note?'　'+h.note:''}</div>`).join('') || '沒有歷史紀錄'}
+      </div>
+    </div>`).join('');
+}
+function toggleHistory(id){
+  const el = document.getElementById('history_'+id);
+  if(el) el.classList.toggle('hidden');
+}
+function openAddonEditor(id){
+  const a = id ? (window.__addonsCache||[]).find(x=>x.id===id) : null;
+  const modalBg = document.createElement('div');
+  modalBg.className = 'modal-bg';
+  modalBg.innerHTML = `
+    <div class="modal">
+      <span class="modal-close" onclick="this.closest('.modal-bg').remove()">關閉 ✕</span>
+      <h3>${a?'編輯加購項目':'新增加購項目'}</h3>
+      <div class="field"><label>名稱</label><input type="text" id="addonName" value="${a?a.name:''}" placeholder="例如：頌缽深度放鬆"></div>
+      <div class="field"><label>${a?'新價格（跟目前價格不同才會建立一筆新的歷史紀錄）':'價格'}</label><input type="text" id="addonPrice" value="${a?a.price:''}" placeholder="例如：300"></div>
+      <div class="field"><label>備註（選填，會記錄在價格歷史裡）</label><input type="text" id="addonNote" placeholder="例如：原物料成本調整"></div>
+      <div style="font-size:11px;color:#6b5a75;margin-bottom:14px;line-height:1.8;">改價格只影響「之後」新送出的預約，已經成立的舊訂單金額不會被追溯更動。</div>
+      <button class="btn btn-primary" onclick="saveAddon(${a?`'${a.id}'`:'null'})">儲存</button>
+    </div>`;
+  document.body.appendChild(modalBg);
+}
+async function saveAddon(id){
+  const name = document.getElementById('addonName').value.trim();
+  const price = document.getElementById('addonPrice').value.trim();
+  const note = document.getElementById('addonNote').value.trim();
+  if(!name || price==='' || isNaN(Number(price))){ toast('請填寫名稱與價格'); return; }
+  try{
+    if(id){
+      await apiPost('/api/addons-admin', {action:'update', id, name, price:Number(price), note}, true);
+    } else {
+      await apiPost('/api/addons-admin', {action:'create', name, price:Number(price), note}, true);
+    }
+    document.querySelector('.modal-bg').remove();
+    toast('已儲存');
+    ADMIN_ADDONS_ALL = await apiGet('/api/addons', true);
+    window.__addonsCache = ADMIN_ADDONS_ALL;
+    document.getElementById('addonsList').innerHTML = addonsListHTML();
+  }catch(e){ toast('儲存失敗'); }
+}
+async function setAddonActive(id, active){
+  try{
+    await apiPost('/api/addons-admin', {action: active?'activate':'deactivate', id}, true);
+    toast(active?'已啟用':'已停用，客戶端不會再看到這個項目');
+    ADMIN_ADDONS_ALL = await apiGet('/api/addons', true);
+    window.__addonsCache = ADMIN_ADDONS_ALL;
+    document.getElementById('addonsList').innerHTML = addonsListHTML();
+  }catch(e){ toast('操作失敗'); }
 }
 
 async function renderAdminStats(el){
