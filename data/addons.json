@@ -1,6 +1,58 @@
 [
-  {"id":"bowl","name":"頌缽深度放鬆","price":300,"active":true,"priceHistory":[{"price":300,"changedAt":"2026-08-01T00:00:00.000Z","note":"建立"}],"createdAt":"2026-08-01T00:00:00.000Z"},
-  {"id":"oil","name":"花油能量調頻","price":300,"active":true,"priceHistory":[{"price":300,"changedAt":"2026-08-01T00:00:00.000Z","note":"建立"}],"createdAt":"2026-08-01T00:00:00.000Z"},
-  {"id":"tarot","name":"塔羅牌指引","price":500,"active":true,"priceHistory":[{"price":500,"changedAt":"2026-08-01T00:00:00.000Z","note":"建立"}],"createdAt":"2026-08-01T00:00:00.000Z"},
-  {"id":"mandala","name":"花卉曼陀羅祈福","price":800,"active":true,"priceHistory":[{"price":800,"changedAt":"2026-08-01T00:00:00.000Z","note":"建立"}],"createdAt":"2026-08-01T00:00:00.000Z"}
+  {
+    "id": "bowl",
+    "name": "頌缽深度放鬆",
+    "price": 300,
+    "active": true,
+    "priceHistory": [
+      {
+        "price": 300,
+        "changedAt": "2026-08-01T00:00:00.000Z",
+        "note": "建立"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "id": "oil",
+    "name": "花油能量調頻",
+    "price": 300,
+    "active": false,
+    "priceHistory": [
+      {
+        "price": 300,
+        "changedAt": "2026-08-01T00:00:00.000Z",
+        "note": "建立"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "id": "tarot",
+    "name": "塔羅牌指引",
+    "price": 500,
+    "active": true,
+    "priceHistory": [
+      {
+        "price": 500,
+        "changedAt": "2026-08-01T00:00:00.000Z",
+        "note": "建立"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "id": "mandala",
+    "name": "花卉曼陀羅祈福",
+    "price": 800,
+    "active": true,
+    "priceHistory": [
+      {
+        "price": 800,
+        "changedAt": "2026-08-01T00:00:00.000Z",
+        "note": "建立"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  }
 ]
