@@ -2,13 +2,18 @@
   {
     "id": "bowl",
     "name": "頌缽深度放鬆",
-    "price": 300,
+    "price": 800,
     "active": true,
     "priceHistory": [
       {
         "price": 300,
         "changedAt": "2026-08-01T00:00:00.000Z",
         "note": "建立"
+      },
+      {
+        "price": 800,
+        "changedAt": "2026-08-07T09:08:43.804Z",
+        "note": ""
       }
     ],
     "createdAt": "2026-08-01T00:00:00.000Z"
