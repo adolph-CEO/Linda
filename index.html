@@ -285,6 +285,7 @@ async function bootApp(){
   root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:#8A4F73;font-family:'Playfair Display',serif;">靈魂藍圖 SPA 載入中...</div>`;
   try{ ADDONS = await apiGet('/api/addons', false); }catch(e){ ADDONS = []; }
   try{ SERVICES = await apiGet('/api/services', false); }catch(e){ SERVICES = []; }
+  if(SERVICES.length && !sel.serviceId) sel.serviceId = SERVICES[0].id;
   render();
 }
 bootApp();
@@ -536,7 +537,7 @@ function renderConfirmScreen(){
   </div>`;
 }
 function startOver(){
-  sel = {serviceId:null, addons:[], date:null, time:null, name:'', phone:'', line:'', birthday:'', firstTime:null, concerns:[], note:''};
+  sel = {serviceId: SERVICES.length?SERVICES[0].id:null, addons:[], date:null, time:null, name:'', phone:'', line:'', birthday:'', firstTime:null, concerns:[], note:''};
   step = 1; confirmedBooking = null; render();
 }
 async function goStep(n){ window.scrollTo(0,0); step = n; document.getElementById('stepBody').innerHTML = `<div style="padding:40px;text-align:center;color:#9b3a72;">載入中...</div>`; await renderStep(); }
