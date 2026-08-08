@@ -68,13 +68,18 @@
   {
     "id": "ad_msk267nsktcj",
     "name": "測試項目",
-    "price": 20,
+    "price": 20000,
     "active": true,
     "priceHistory": [
       {
         "price": 20,
         "changedAt": "2026-08-08T07:34:48.136Z",
         "note": "測試用"
+      },
+      {
+        "price": 20000,
+        "changedAt": "2026-08-08T07:35:44.398Z",
+        "note": ""
       }
     ],
     "createdAt": "2026-08-08T07:34:48.136Z"
