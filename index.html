@@ -5,35 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>靈魂藍圖 SPA｜線上預約</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Manrope:wght@400;500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --plum-deep:#2f1b3d;
-  --plum:#4a2a5e;
-  --berry:#9b3a72;
-  --rose:#d4548a;
-  --blush:#f3e3ea;
-  --parchment:#faf6f3;
-  --gold:#c9a35c;
-  --gold-soft:#e6d3a3;
-  --ink:#2f1b3d;
-  --ink-soft:#6b5a75;
-  --line:#e4d8de;
+  --plum-deep:#6B4E71;
+  --plum:#6B4E71;
+  --berry:#8A4F73;
+  --rose:#D9A9B0;
+  --blush:#F1E9F0;
+  --parchment:#FBF6F4;
+  --gold:#C9713F;
+  --gold-soft:#e8c3a6;
+  --ink:#332733;
+  --ink-soft:#5A4C57;
+  --ink-muted:#9C8B95;
+  --line:#EDE1E5;
   --ok:#5c8a6a;
   --danger:#b3543f;
-  --shadow:0 10px 30px rgba(47,27,61,.12);
+  --disabled:#DCCFDA;
+  --shadow:0 10px 30px rgba(51,39,51,.12);
   --radius:18px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;}
-body{font-family:'Noto Sans TC',sans-serif;background:var(--parchment);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
-h1,h2,h3{font-family:'Noto Serif TC',serif;margin:0;}
-.accent-en{font-family:'Cormorant Garamond',serif;font-style:italic;}
+body{font-family:'Manrope','Noto Sans TC',sans-serif;background:var(--parchment);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Playfair Display','Noto Serif TC',serif;font-weight:700;margin:0;}
+.accent-en{font-family:'Playfair Display','Noto Serif TC',serif;font-weight:700;font-style:normal;}
+.page-kicker{font-family:'Manrope','Noto Sans TC',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--berry);margin-bottom:4px;}
+.page-title{font-family:'Playfair Display','Noto Serif TC',serif;font-weight:700;font-size:21px;color:var(--ink);}
 button{font-family:inherit;}
 a{color:inherit;}
 .app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--parchment);position:relative;box-shadow:0 0 60px rgba(0,0,0,.08);}
 .hidden{display:none !important;}
-.hero{position:relative;padding:38px 24px 30px;background:linear-gradient(150deg,#e7b8c9 0%,#c46f9a 28%,#7a3f7f 62%,#3d2352 100%);color:#fff;overflow:hidden;text-align:center;}
+.hero{position:relative;padding:38px 24px 30px;background:linear-gradient(120deg,#D9A9B0 0%,#6B4E71 100%);color:#fff;overflow:hidden;text-align:center;}
 .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%, rgba(255,255,255,.35), transparent 55%);pointer-events:none;}
 .hero .stars{position:absolute;inset:0;pointer-events:none;}
 .hero .stars span{position:absolute;color:rgba(255,255,255,.55);font-size:11px;}
@@ -52,24 +56,32 @@ a{color:inherit;}
 .section-title .num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:22px;}
 .section-title h2{font-size:17px;letter-spacing:.04em;color:var(--plum-deep);}
 .section-title .opt{font-size:11px;color:var(--ink-soft);margin-left:auto;}
-.service{border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;transition:.2s;position:relative;}
-.service:last-child{margin-bottom:0;}
-.service:active{transform:scale(.99);}
-.service.selected{border-color:var(--rose);background:linear-gradient(135deg,#fff,#fbeef3);box-shadow:0 4px 16px rgba(212,84,138,.18);}
-.service-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
-.service-name{font-family:'Noto Serif TC',serif;font-size:15.5px;font-weight:600;color:var(--plum-deep);}
-.service-meta{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
-.service-price{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--berry);white-space:nowrap;}
-.service-desc{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.7;}
-.radio-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;}
-.service.selected .radio-dot{border-color:var(--rose);}
-.service.selected .radio-dot::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--rose);}
-.addon{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--line);cursor:pointer;}
-.addon:last-child{border-bottom:none;}
-.checkbox{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;}
-.addon.checked .checkbox{background:var(--gold);border-color:var(--gold);}
-.addon.checked .checkbox::after{content:"✓";color:#fff;font-size:11px;}
-.addon-name{font-size:13.5px;}
+.service-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:4px 40px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.service-carousel::-webkit-scrollbar{display:none;}
+.car-card{flex:0 0 auto;height:230px;border-radius:22px;position:relative;background-size:cover;background-position:center;scroll-snap-align:center;cursor:pointer;overflow:hidden;transition:width .35s ease,border-color .2s;background-color:#e9dde3;}
+.car-card.selected{width:210px;border:2px solid var(--plum);box-shadow:0 10px 26px rgba(107,78,113,.28);}
+.car-card:not(.selected){width:58px;border:2px solid transparent;}
+.car-card:not(.selected)::before{content:"";position:absolute;inset:0;background:rgba(35,24,34,.5);}
+.car-card:not(.selected) .car-name-vertical{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;color:#fff;font-size:12px;letter-spacing:.08em;font-family:'Noto Sans TC',sans-serif;opacity:.95;}
+.car-card.selected .car-name-vertical{display:none;}
+.car-card.selected::after{content:"";position:absolute;left:0;right:0;bottom:0;height:65%;background:linear-gradient(to top, rgba(35,24,34,.82), transparent);}
+.car-card .car-info{display:none;}
+.car-card.selected .car-info{display:block;position:absolute;left:14px;right:14px;bottom:12px;z-index:2;color:#fff;}
+.car-card .car-info .cn-name{font-family:'Playfair Display','Noto Serif TC',serif;font-weight:700;font-size:17px;}
+.car-card .car-info .cn-meta{font-size:11px;opacity:.85;margin-top:2px;}
+.car-card .car-info .cn-price{font-family:'Playfair Display','Noto Serif TC',serif;font-weight:700;font-size:16px;margin-top:6px;}
+.car-check{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;background:var(--plum);color:#fff;display:none;align-items:center;justify-content:center;font-size:14px;z-index:2;}
+.car-card.selected .car-check{display:flex;}
+.carousel-label{font-size:12px;color:var(--ink-muted);margin-bottom:8px;}
+.addon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.addon-card{border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;transition:.15s;background:#fff;}
+.addon-card.checked{background:var(--blush);border-color:var(--plum);}
+.addon-card .ac-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;}
+.addon-card .ac-name{font-size:13px;color:var(--ink);line-height:1.5;}
+.addon-card .ac-price{font-size:11.5px;color:var(--gold);margin-top:6px;font-weight:600;}
+.ac-checkbox{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.addon-card.checked .ac-checkbox{background:var(--plum);border-color:var(--plum);}
+.addon-card.checked .ac-checkbox::after{content:"✓";color:#fff;font-size:11px;}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .cal-nav{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--plum);}
 .cal-nav:disabled{opacity:.3;cursor:default;}
@@ -93,7 +105,7 @@ a{color:inherit;}
 .slot-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:12.5px;padding:14px 0;}
 .field{margin-bottom:14px;}
 .field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;}
-.field input[type=text],.field input[type=tel],.field input[type=password],.field textarea{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:14.5px;background:#fdfbfa;color:var(--ink);}
+.field input[type=text],.field input[type=tel],.field input[type=password],.field textarea{width:100%;padding:12px 14px;border:none;border-radius:14px;font-size:14px;background:#F7F1F5;color:var(--ink);font-family:inherit;}
 .field textarea{resize:vertical;min-height:64px;font-family:inherit;}
 .field input:focus,.field textarea:focus{outline:2px solid var(--gold-soft);outline-offset:1px;border-color:var(--gold);}
 .pill-group{display:flex;flex-wrap:wrap;gap:8px;}
@@ -101,13 +113,14 @@ a{color:inherit;}
 .pill.on{background:var(--plum);border-color:var(--plum);color:#fff;}
 .toggle-row{display:flex;gap:10px;}
 .toggle-row .pill{flex:1;text-align:center;}
-.btn{width:100%;padding:15px;border-radius:14px;border:none;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.06em;transition:.15s;}
-.btn-primary{background:linear-gradient(135deg,var(--rose),var(--plum));color:#fff;box-shadow:0 8px 20px rgba(122,63,127,.3);}
-.btn-primary:disabled{opacity:.35;box-shadow:none;cursor:default;}
+.btn{width:100%;padding:15px;border-radius:999px;border:none;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:.15s;font-family:'Manrope','Noto Sans TC',sans-serif;}
+.btn-primary{background:linear-gradient(120deg,var(--rose),var(--plum));color:#fff;box-shadow:0 8px 20px rgba(107,78,113,.3);}
+.btn-primary:disabled{background:var(--disabled);opacity:1;box-shadow:none;cursor:default;color:#fff;}
 .btn-primary:active:not(:disabled){transform:translateY(1px);}
 .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink-soft);}
 .btn-row{display:flex;gap:10px;margin-top:18px;}
 .btn-row .btn-ghost{flex:0 0 92px;}
+.cta-subtext{text-align:center;font-size:11.5px;color:var(--ink-muted);margin-top:10px;}
 .summary{background:var(--blush);border-radius:14px;padding:16px;font-size:13px;color:var(--plum-deep);line-height:2;}
 .summary b{color:var(--berry);}
 .confirm-wrap{padding:50px 26px;text-align:center;}
@@ -180,13 +193,10 @@ a{color:inherit;}
    靈魂藍圖 SPA - 線上預約系統（Vercel + GitHub 版）
    資料透過 /api/* 讀寫，實際存在 GitHub repo 的 data/ 目錄下
    ========================================================= */
-const SERVICES = [
-  {id:'body', name:'身體開運 Spa', duration:120, price:2000, desc:'情緒壓力大・能量低落・身體疲勞・想提升磁場'},
-  {id:'head', name:'頭部舒壓 Spa', duration:60, price:1680, desc:'睡不好・腦袋停不下來・肩頸僵硬・思緒混亂'},
-  {id:'warm', name:'暖宮 Spa', duration:90, price:2500, desc:'經期不舒服・手腳冰冷・女性保養・子宮循環調理'},
-];
+let SERVICES = []; // 改由 /api/services 動態載入，不再寫死
 let ADDONS = []; // 改由 /api/addons 動態載入，不再寫死
 let ADMIN_ADDONS_ALL = null; // 後台登入後載入，含已停用項目，讓歷史訂單的加購名稱能正確顯示
+let ADMIN_SERVICES_ALL = null; // 後台登入後載入，含已停用項目，讓歷史訂單的服務名稱能正確顯示
 const CONCERNS = ['情緒壓力','睡眠','疲勞','腸胃','肩頸','婦科','能量提升','桃花','財運','其他'];
 const TIME_SLOTS = ['10:00','11:30','13:00','14:30','16:00','17:30','19:00'];
 const NOTICES = ['採預約制','遲到15分鐘將縮短療程','當日取消恕不退訂金','女性優先','如身體特殊狀況請提前告知'];
@@ -197,7 +207,7 @@ function fmtDate(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.ge
 function todayStr(){ return fmtDate(new Date()); }
 function parseDate(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
 function money(n){ return 'NT$'+n.toLocaleString(); }
-function serviceById(id){ return SERVICES.find(s=>s.id===id); }
+function serviceById(id){ const pool = ADMIN_SERVICES_ALL || SERVICES; return pool.find(s=>s.id===id) || {id, name:id, duration:60, price:0, desc:''}; }
 function addonById(id){ const pool = ADMIN_ADDONS_ALL || ADDONS; return pool.find(a=>a.id===id) || {id, name:id, price:0}; }
 function daysBetween(a,b){ return Math.round((parseDate(b)-parseDate(a))/86400000); }
 
@@ -267,8 +277,9 @@ window.addEventListener('hashchange', ()=>{ view = location.hash === '#admin' ? 
 
 function render(){ view === 'admin' ? renderAdminRoot() : renderBookingRoot(); }
 async function bootApp(){
-  root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:#9b3a72;font-family:'Noto Serif TC',serif;">靈魂藍圖 SPA 載入中...</div>`;
+  root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:#8A4F73;font-family:'Playfair Display',serif;">靈魂藍圖 SPA 載入中...</div>`;
   try{ ADDONS = await apiGet('/api/addons', false); }catch(e){ ADDONS = []; }
+  try{ SERVICES = await apiGet('/api/services', false); }catch(e){ SERVICES = []; }
   render();
 }
 bootApp();
@@ -323,30 +334,53 @@ async function renderStep(){
 }
 
 function stepService(){
+  const svc = serviceById(sel.serviceId);
+  const addonTotal = sel.addons.reduce((sum,id)=>sum + addonById(id).price, 0);
+  const subtext = svc ? `${svc.name}　・　${sel.addons.length}項加購　・　${money(svc.price+addonTotal)}` : '請先選擇一項服務';
   return `
-  <div class="section"><div class="card">
-    <div class="section-title"><span class="num">01</span><h2>選擇服務</h2></div>
-    ${SERVICES.map(sv=>`
-      <div class="service ${sel.serviceId===sv.id?'selected':''}" onclick="pickService('${sv.id}')">
-        <div class="service-top">
-          <div><div class="service-name">${sv.name}</div><div class="service-meta">${sv.duration} 分鐘</div></div>
-          <div style="display:flex;align-items:center;gap:10px;"><div class="service-price accent-en">${money(sv.price)}</div><div class="radio-dot"></div></div>
-        </div>
-        <div class="service-desc">${sv.desc}</div>
-      </div>`).join('')}
+  <div class="section"><div class="card" style="padding:20px 0 20px 20px;">
+    <div style="padding:0 20px 0 0;"><div class="page-kicker">01 · 服務選擇</div><h2 class="page-title">選擇服務項目</h2></div>
+    <div class="carousel-label" style="padding:12px 20px 0 0;">選擇服務 · 左右滑動</div>
+    <div class="service-carousel" id="serviceCarousel">
+      ${SERVICES.map(sv=>`
+        <div class="car-card ${sel.serviceId===sv.id?'selected':''}" data-id="${sv.id}"
+             style="background-image:${sv.image? `url('${sv.image}')` : `linear-gradient(160deg,#D9A9B0,#6B4E71)`};"
+             onclick="pickService('${sv.id}')">
+          <div class="car-name-vertical">${sv.name}</div>
+          <div class="car-check">✓</div>
+          <div class="car-info">
+            <div class="cn-name">${sv.name}</div>
+            <div class="cn-meta">${sv.duration}分鐘</div>
+            <div class="cn-price">${money(sv.price)}</div>
+          </div>
+        </div>`).join('')}
+    </div>
   </div>
   <div class="card" style="margin-top:14px;">
-    <div class="section-title"><span class="num">＋</span><h2>加購服務</h2><span class="opt">選填</span></div>
-    ${ADDONS.map(a=>`
-      <div class="addon ${sel.addons.includes(a.id)?'checked':''}" onclick="toggleAddon('${a.id}')">
-        <div class="checkbox"></div><div class="addon-name">${a.name}</div>
-        <div style="margin-left:auto;font-size:12px;color:#6b5a75;">+${money(a.price)}</div>
-      </div>`).join('')}
+    <div class="page-kicker">＋ 加購</div><h2 class="page-title" style="font-size:17px;">選購項目（可多選）</h2>
+    <div class="addon-grid" style="margin-top:14px;">
+      ${ADDONS.map(a=>`
+        <div class="addon-card ${sel.addons.includes(a.id)?'checked':''}" onclick="toggleAddon('${a.id}')">
+          <div class="ac-top"><div class="ac-name">${a.name}</div><div class="ac-checkbox"></div></div>
+          <div class="ac-price">+${money(a.price)}</div>
+        </div>`).join('')}
+      ${!ADDONS.length ? `<div style="grid-column:1/-1;font-size:12px;color:var(--ink-muted);">目前沒有加購項目</div>` : ''}
+    </div>
   </div>
-  <div class="section" style="padding-top:18px;"><button class="btn btn-primary" ${!sel.serviceId?'disabled':''} onclick="goStep(2)">下一步：選擇日期</button></div>
+  <div class="section" style="padding-top:18px;">
+    <button class="btn btn-primary" ${!sel.serviceId?'disabled':''} onclick="goStep(2)">下一步</button>
+    <div class="cta-subtext">${subtext}</div>
+  </div>
   </div>`;
 }
-function pickService(id){ sel.serviceId = id; renderStep(); }
+function pickService(id){
+  sel.serviceId = id; renderStep();
+  setTimeout(()=>{
+    const track = document.getElementById('serviceCarousel');
+    const card = track && track.querySelector('.car-card.selected');
+    if(card) card.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }, 0);
+}
 function toggleAddon(id){ const i=sel.addons.indexOf(id); if(i>-1) sel.addons.splice(i,1); else sel.addons.push(id); renderStep(); }
 
 function stepDate(){
@@ -372,7 +406,7 @@ function stepDate(){
   const dow = ['日','一','二','三','四','五','六'];
   return `
   <div class="section"><div class="card">
-    <div class="section-title"><span class="num">02</span><h2>選擇日期</h2></div>
+    <div class="page-kicker">02 · 日期時間選擇</div><h2 class="page-title" style="margin-bottom:14px;">選擇日期</h2>
     <div class="cal-head"><button class="cal-nav" onclick="shiftMonth(-1)">‹</button><div class="cal-month">${y} 年 ${m+1} 月</div><button class="cal-nav" onclick="shiftMonth(1)">›</button></div>
     <div class="cal-grid">${dow.map(d=>`<div class="cal-dow">${d}</div>`).join('')}${cells}</div>
     <div class="cal-legend">
@@ -399,7 +433,7 @@ function stepTime(){
   const slots = sel.date ? slotsFor(sel.date) : [];
   return `
   <div class="section"><div class="card">
-    <div class="section-title"><span class="num">03</span><h2>選擇時段</h2><span class="opt">${sel.date||''}</span></div>
+    <div class="page-kicker">02 · 日期時間選擇</div><h2 class="page-title" style="margin-bottom:2px;">選擇時段</h2><div class="carousel-label" style="margin-bottom:12px;">${sel.date||''}</div>
     <div class="slots">${slots.length ? slots.map(s=>`
       <div class="slot ${s.taken?'taken':''} ${sel.time===s.time?'selected':''}" onclick="${s.taken?'':`pickTime('${s.time}')`}">${s.time}${s.taken?'<br><span style="font-size:10px;">已預約</span>':''}</div>
     `).join('') : `<div class="slot-empty">請先選擇日期</div>`}</div>
@@ -414,7 +448,7 @@ function pickTime(t){ sel.time = t; renderStep(); }
 function stepForm(){
   return `
   <div class="section"><div class="card">
-    <div class="section-title"><span class="num">04</span><h2>填寫資料</h2></div>
+    <div class="page-kicker">03 · 預約確認</div><h2 class="page-title" style="margin-bottom:14px;">填寫資料</h2>
     <div class="field"><label>姓名</label><input type="text" id="f_name" value="${sel.name}" placeholder="怎麼稱呼您"></div>
     <div class="field"><label>電話</label><input type="tel" id="f_phone" value="${sel.phone}" placeholder="方便聯絡的電話"></div>
     <div class="field"><label>LINE ID</label><input type="text" id="f_line" value="${sel.line}" placeholder="您的 LINE ID"></div>
@@ -429,7 +463,7 @@ function stepForm(){
     <div class="field"><label>今天想告訴琳達什麼</label><textarea id="f_note" placeholder="留言（選填）">${sel.note}</textarea></div>
   </div>
   <div class="card" style="margin-top:14px;">
-    <div class="section-title"><span class="num">05</span><h2>預約須知</h2></div>
+    <div class="page-kicker">須知</div><h2 class="page-title" style="font-size:16px;margin-bottom:10px;">預約須知</h2>
     ${NOTICES.map(n=>`<div style="font-size:12.5px;color:#6b5a75;padding:4px 0;">✔ ${n}</div>`).join('')}
   </div>
   <div class="section" style="padding-top:18px;"><div class="btn-row">
@@ -511,7 +545,7 @@ function renderAdminRoot(){
   root.innerHTML = `
     <div class="admin">
       <div class="admin-top"><h1>靈魂藍圖 SPA｜後台管理</h1><a href="#" onclick="adminUnlocked=false;adminToken='';render();return false;">登出</a></div>
-      <div class="tabs">${tabBtn('today','今日預約')}${tabBtn('calview','月曆總覽')}${tabBtn('all','全部預約')}${tabBtn('customers','客戶資料')}${tabBtn('addons','加購管理')}${tabBtn('stats','收入統計')}${tabBtn('followup','回訪提醒')}${tabBtn('calendar','行事曆訂閱')}</div>
+      <div class="tabs">${tabBtn('today','今日預約')}${tabBtn('calview','月曆總覽')}${tabBtn('all','全部預約')}${tabBtn('customers','客戶資料')}${tabBtn('services','主要服務管理')}${tabBtn('addons','加購管理')}${tabBtn('stats','收入統計')}${tabBtn('followup','回訪提醒')}${tabBtn('calendar','行事曆訂閱')}</div>
       <div class="admin-body" id="adminBody"><div class="empty-state">載入中...</div></div>
       <div class="foot"><a href="#" onclick="location.hash='';return false;">回到預約頁</a></div>
     </div>`;
@@ -537,6 +571,7 @@ async function checkPin(){
     await apiPost('/api/admin-login', {password:v}, false);
     adminToken = v; adminUnlocked = true;
     try{ ADMIN_ADDONS_ALL = await apiGet('/api/addons', true); }catch(e){ ADMIN_ADDONS_ALL = null; }
+    try{ ADMIN_SERVICES_ALL = await apiGet('/api/services', true); }catch(e){ ADMIN_SERVICES_ALL = null; }
     render();
   }catch(e){
     document.getElementById('pinErr').textContent = e.body && e.body.error ? e.body.error : '密碼錯誤';
@@ -552,6 +587,7 @@ async function renderAdminTab(){
     if(adminTab==='all') return renderAdminAll(el);
     if(adminTab==='customers') return renderAdminCustomers(el);
     if(adminTab==='addons') return renderAdminAddons(el);
+    if(adminTab==='services') return renderAdminServices(el);
     if(adminTab==='stats') return renderAdminStats(el);
     if(adminTab==='followup') return renderAdminFollowup(el);
     if(adminTab==='calendar') return renderAdminCalendar(el);
@@ -808,6 +844,116 @@ async function setAddonActive(id, active){
     window.__addonsCache = ADMIN_ADDONS_ALL;
     document.getElementById('addonsList').innerHTML = addonsListHTML();
   }catch(e){ toast('操作失敗'); }
+}
+
+/* ---- 主要服務管理 ---- */
+async function renderAdminServices(el){
+  ADMIN_SERVICES_ALL = await apiGet('/api/services', true);
+  window.__servicesCache = ADMIN_SERVICES_ALL;
+  el.innerHTML = `
+    <button class="btn btn-primary" style="margin-bottom:16px;" onclick="openServiceEditor(null)">＋ 新增主要服務</button>
+    <div id="servicesList" class="addons-grid">${servicesListHTML()}</div>`;
+}
+function servicesListHTML(){
+  const list = window.__servicesCache || [];
+  if(!list.length) return `<div class="empty-state">目前沒有服務項目</div>`;
+  return list.map(s=>`
+    <div class="list-item">
+      ${s.image ? `<img src="${s.image}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;margin-bottom:10px;">` : `<div style="width:100%;height:120px;border-radius:10px;margin-bottom:10px;background:linear-gradient(160deg,#D9A9B0,#6B4E71);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">尚未上傳示意圖片</div>`}
+      <div class="li-top">
+        <div class="li-name">${s.name}${s.active===false?'　<span style="font-size:10.5px;color:#b3543f;">已停用</span>':''}</div>
+        <div class="addon-price-lg">${money(s.price)}</div>
+      </div>
+      <div class="li-meta">${s.duration}分鐘　・　id：${s.id}</div>
+      ${s.desc?`<div class="li-meta">${s.desc}</div>`:''}
+      <div class="row-between">
+        <button class="mini-btn" onclick="toggleServiceHistory('${s.id}')">價格歷史</button>
+        <div style="display:flex;gap:8px;">
+          <button class="mini-btn" onclick="openServiceEditor('${s.id}')">編輯</button>
+          ${s.active===false
+            ? `<button class="mini-btn primary" onclick="setServiceActive('${s.id}',true)">啟用</button>`
+            : `<button class="mini-btn" style="color:#b3543f;border-color:#e8c9c0;" onclick="setServiceActive('${s.id}',false)">停用</button>`}
+        </div>
+      </div>
+      <div class="row-between">
+        <input type="file" accept="image/*" id="img_${s.id}" style="font-size:11px;max-width:100%;" onchange="uploadServiceImage('${s.id}')">
+      </div>
+      <div id="svchistory_${s.id}" class="hidden" style="margin-top:10px;background:#faf6f3;border-radius:10px;padding:10px;font-size:11.5px;color:#6b5a75;">
+        ${(s.priceHistory||[]).slice().reverse().map(h=>`<div>${new Date(h.changedAt).toLocaleString('zh-TW')}　${money(h.price)}${h.note?'　'+h.note:''}</div>`).join('') || '沒有歷史紀錄'}
+      </div>
+    </div>`).join('');
+}
+function toggleServiceHistory(id){
+  const el = document.getElementById('svchistory_'+id);
+  if(el) el.classList.toggle('hidden');
+}
+function openServiceEditor(id){
+  const s = id ? (window.__servicesCache||[]).find(x=>x.id===id) : null;
+  const modalBg = document.createElement('div');
+  modalBg.className = 'modal-bg';
+  modalBg.innerHTML = `
+    <div class="modal">
+      <span class="modal-close" onclick="this.closest('.modal-bg').remove()">關閉 ✕</span>
+      <h3>${s?'編輯主要服務':'新增主要服務'}</h3>
+      <div class="field"><label>名稱</label><input type="text" id="svcName" value="${s?s.name:''}" placeholder="例如：身體開運 Spa"></div>
+      <div class="field"><label>時長（分鐘）</label><input type="text" id="svcDuration" value="${s?s.duration:''}" placeholder="例如：120"></div>
+      <div class="field"><label>${s?'新價格（跟目前價格不同才會建立一筆新的歷史紀錄）':'價格'}</label><input type="text" id="svcPrice" value="${s?s.price:''}" placeholder="例如：2000"></div>
+      <div class="field"><label>適合狀況說明</label><textarea id="svcDesc" placeholder="例如：情緒壓力大・能量低落">${s?s.desc||'':''}</textarea></div>
+      <div class="field"><label>備註（選填，會記錄在價格歷史裡）</label><input type="text" id="svcNote" placeholder="例如：漲價原因"></div>
+      <div style="font-size:11px;color:#6b5a75;margin-bottom:14px;line-height:1.8;">改價格只影響「之後」新送出的預約，已經成立的舊訂單金額不會被追溯更動。示意圖片請存檔後在清單卡片下方另外上傳。</div>
+      <button class="btn btn-primary" onclick="saveService(${s?`'${s.id}'`:'null'})">儲存</button>
+    </div>`;
+  document.body.appendChild(modalBg);
+}
+async function saveService(id){
+  const name = document.getElementById('svcName').value.trim();
+  const duration = document.getElementById('svcDuration').value.trim();
+  const price = document.getElementById('svcPrice').value.trim();
+  const desc = document.getElementById('svcDesc').value.trim();
+  const note = document.getElementById('svcNote').value.trim();
+  if(!name || price==='' || isNaN(Number(price)) || duration==='' || isNaN(Number(duration))){ toast('請填寫名稱、時長與價格'); return; }
+  try{
+    if(id){
+      await apiPost('/api/services-admin', {action:'update', id, name, duration:Number(duration), price:Number(price), desc, note}, true);
+    } else {
+      await apiPost('/api/services-admin', {action:'create', name, duration:Number(duration), price:Number(price), desc, note}, true);
+    }
+    document.querySelector('.modal-bg').remove();
+    toast('已儲存');
+    ADMIN_SERVICES_ALL = await apiGet('/api/services', true);
+    window.__servicesCache = ADMIN_SERVICES_ALL;
+    document.getElementById('servicesList').innerHTML = servicesListHTML();
+  }catch(e){ toast('儲存失敗'); }
+}
+async function setServiceActive(id, active){
+  try{
+    await apiPost('/api/services-admin', {action: active?'activate':'deactivate', id}, true);
+    toast(active?'已啟用':'已停用，客戶端不會再看到這個項目');
+    ADMIN_SERVICES_ALL = await apiGet('/api/services', true);
+    window.__servicesCache = ADMIN_SERVICES_ALL;
+    document.getElementById('servicesList').innerHTML = servicesListHTML();
+  }catch(e){ toast('操作失敗'); }
+}
+function uploadServiceImage(id){
+  const input = document.getElementById('img_'+id);
+  const file = input.files && input.files[0];
+  if(!file) return;
+  if(file.size > 2*1024*1024){ toast('圖片請控制在2MB以內'); input.value=''; return; }
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const dataUrl = reader.result; // data:image/xxx;base64,....
+    const base64 = dataUrl.split(',')[1];
+    const ext = (file.type.split('/')[1] || 'jpg').replace('jpeg','jpg');
+    toast('上傳中...');
+    try{
+      await apiPost('/api/services-admin', {action:'upload-image', id, imageBase64:base64, imageExt:ext}, true);
+      toast('圖片已更新');
+      ADMIN_SERVICES_ALL = await apiGet('/api/services', true);
+      window.__servicesCache = ADMIN_SERVICES_ALL;
+      document.getElementById('servicesList').innerHTML = servicesListHTML();
+    }catch(e){ toast('上傳失敗'); }
+  };
+  reader.readAsDataURL(file);
 }
 
 async function renderAdminStats(el){
