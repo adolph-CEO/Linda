@@ -72,4 +72,23 @@ function listDir(path) {
   });
 }
 
-module.exports = { getFile, putFile, readModifyWrite, listDir, ghHeaders, OWNER, REPO, BRANCH };
+// 寫入原始二進位內容（例如圖片），content已經是base64字串
+async function putRawFile(path, base64Content, sha, message) {
+  const url = `${GH_API}/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(path).replace(/%2F/g, '/')}`;
+  const body = { message, content: base64Content, branch: BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(url, {
+    method: 'PUT',
+    headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) {
+    const t = await r.text();
+    const err = new Error('GitHub write failed: ' + r.status + ' ' + t);
+    err.status = r.status;
+    throw err;
+  }
+  return r.json();
+}
+
+module.exports = { getFile, putFile, putRawFile, readModifyWrite, listDir, ghHeaders, OWNER, REPO, BRANCH };
