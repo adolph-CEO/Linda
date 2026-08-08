@@ -1,0 +1,5 @@
+[
+  {"id":"body","name":"身體開運 Spa","duration":120,"price":2000,"desc":"情緒壓力大・能量低落・身體疲勞・想提升磁場","image":null,"active":true,"priceHistory":[{"price":2000,"changedAt":"2026-08-01T00:00:00.000Z","note":"建立"}],"createdAt":"2026-08-01T00:00:00.000Z"},
+  {"id":"head","name":"頭部舒壓 Spa","duration":60,"price":1680,"desc":"睡不好・腦袋停不下來・肩頸僵硬・思緒混亂","image":null,"active":true,"priceHistory":[{"price":1680,"changedAt":"2026-08-01T00:00:00.000Z","note":"建立"}],"createdAt":"2026-08-01T00:00:00.000Z"},
+  {"id":"warm","name":"暖宮 Spa","duration":90,"price":2500,"desc":"經期不舒服・手腳冰冷・女性保養・子宮循環調理","image":null,"active":true,"priceHistory":[{"price":2500,"changedAt":"2026-08-01T00:00:00.000Z","note":"建立"}],"createdAt":"2026-08-01T00:00:00.000Z"}
+]
