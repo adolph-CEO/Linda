@@ -64,5 +64,19 @@
       }
     ],
     "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "id": "ad_msk267nsktcj",
+    "name": "測試項目",
+    "price": 20,
+    "active": true,
+    "priceHistory": [
+      {
+        "price": 20,
+        "changedAt": "2026-08-08T07:34:48.136Z",
+        "note": "測試用"
+      }
+    ],
+    "createdAt": "2026-08-08T07:34:48.136Z"
   }
 ]
