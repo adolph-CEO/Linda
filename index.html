@@ -168,6 +168,9 @@ a{color:inherit;}
 .admin-cal-day.lv2 .acd-badge{background:var(--rose);}
 .admin-cal-day.lv3{background:#fbeef3;}
 .admin-cal-day.lv3 .acd-badge{background:var(--plum);}
+.addons-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+@media(min-width:860px){ .addons-grid{grid-template-columns:repeat(3,1fr);} }
+.addon-price-lg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--berry);font-weight:600;}
 </style>
 </head>
 <body>
@@ -733,7 +736,7 @@ async function renderAdminAddons(el){
   window.__addonsCache = ADMIN_ADDONS_ALL;
   el.innerHTML = `
     <button class="btn btn-primary" style="margin-bottom:16px;" onclick="openAddonEditor(null)">＋ 新增加購項目</button>
-    <div id="addonsList">${addonsListHTML()}</div>`;
+    <div id="addonsList" class="addons-grid">${addonsListHTML()}</div>`;
 }
 function addonsListHTML(){
   const list = window.__addonsCache || [];
@@ -742,7 +745,7 @@ function addonsListHTML(){
     <div class="list-item">
       <div class="li-top">
         <div class="li-name">${a.name}${a.active===false?'　<span style="font-size:10.5px;color:#b3543f;">已停用</span>':''}</div>
-        <div class="li-time accent-en">${money(a.price)}</div>
+        <div class="addon-price-lg">${money(a.price)}</div>
       </div>
       <div class="li-meta">目前使用中的id：${a.id}（訂單資料靠這個id對應，改名不影響舊訂單）</div>
       <div class="row-between">
