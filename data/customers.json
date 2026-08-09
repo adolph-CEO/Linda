@@ -35,5 +35,23 @@
       }
     ],
     "createdAt": "2026-08-04T05:43:53.903Z"
+  },
+  {
+    "phone": "090000000",
+    "name": "1235",
+    "line": "Aaaaaa",
+    "birthday": "19790405",
+    "balance": 0,
+    "sessionsRemaining": 0,
+    "ledger": [],
+    "visits": [
+      {
+        "date": "2026-08-09",
+        "time": "19:00",
+        "serviceId": "warm",
+        "bookingId": "bk_1786289937444_x4jrs4"
+      }
+    ],
+    "createdAt": "2026-08-09T15:38:58.114Z"
   }
 ]
